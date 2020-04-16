@@ -1,0 +1,808 @@
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+html,body {
+    height:100%;
+    width:100%;
+}
+
+.column {
+    float:left;
+    height:100%;
+}
+
+.row {
+    height:100%;
+}
+
+.row::after {
+    content:"";
+    display:table;
+    clear:both;
+}
+
+.opt {
+    width:15%;
+}
+
+.ctrSvg {
+    width:60%;
+}
+
+.meta {
+    margin-left:2%;
+    width:23%;
+}
+
+.metaName {
+    height:5%;
+}
+
+</style>
+
+<!--Category: S29-47, Frequency: S1-47, Slots: S16-47, W/L: S29-47-->
+<body>
+<div style="display:flex; flex-flow:column; height:100%;">
+<div style="height:120px;"><h1>The Price Is Right Pricing Games</h1></div><br>
+<div class="row">
+    <div class="column opt">
+        <label for="Categories">Category:</label>
+        <select id="Categories">
+            <option value="all">All Games</option>
+            <option value="cat">Grouped By Category</option>
+            <option value="car">Car Games</option>
+            <option value="cash">Cash Games</option>
+            <option value="small">Small Prize Games</option>
+            <option value="grocery">Grocery Product Games</option>
+            <option value="onep">1 Prize Games</option>
+            <option value="twop">2 Prize Games</option>
+            <option value="threep">3 Prize Games</option>
+            <option value="fourp">4+ Prize Games</option>
+        </select><br>
+        <label for="View">View:</label>
+        <select id="View">
+            <option value="all">All</option>
+            <option value="5">Top 5</option>
+            <option value="10">Top 10</option>
+            <option value="20">Top 20</option>
+            <option value="50">Top 50</option>
+        </select><br>
+        <label for="Plot">Plot:</label>
+        <select id="Plot">
+            <option value="fwl">Frequency vs Win Pct</option>
+            <option value="fr">Frequency</option>
+            <option value="cat">Win Percentage</option>
+        </select><br>
+        <label for="Active">Show only Active Games?</label>
+        <select id="Active">
+            <option value="n">No</option>
+            <option value="y">Yes</option>
+        </select><br>
+        <button id="updateViz">Update</button><br>
+        <div style="background-color: #e3655b;">Car Games</div><br>
+        <div style="background-color: #2ca02c;">Cash Games</div><br>
+        <div style="background-color: #cfd186;">Grocery Product Games</div><br>
+        <div style="background-color: #596157;"><font color="white">Small Prize Games</font></div><br>
+        <div style="background-color: #9eecf0;"><font color="black">One Prize Games</font></div><br>
+        <div style="background-color: #c5b0d5;">Two Prize Games</div><br>
+        <div style="background-color: #2463b9;"><font color="white">Three Prize Games</font></div><br>
+        <div style="background-color: #fbb02d;">Four+ Prize Games</div><br>
+        <div style="background-color: black;"><font color="white">No Category Available</font></div>
+    </div>
+    <div id="ctrSvgDiv" class="column ctrSvg">
+        <svg id="ctrSvg"></svg>
+    </div>
+    <div class="column meta">
+        <div class="metaName">
+            <h3 id="gameName" style="margin:0"></h3>
+        </div>
+        <svg id="slotSvg"></svg><br>
+        <p id="metaApp">First Appearance:</p>
+        <p id="metaCat">Categories:</p>
+        <p id="metaTotal">Total Appearances:</p>
+        <p id="metaFrank">Total Appearances Rank:</p>
+        <p id="metaActive">Seasons Active:</p>
+        <p id="metaWPct">Win Percentage:</p>
+    </div>
+</div>
+</div>
+</body>
+
+<script src="js/d3.v4.min.js"></script>
+<script src="js/topojson.v1.min.js"></script>
+<script>
+
+var ctrSvg = d3.select("#ctrSvg");
+var width = window.innerWidth * 0.6;
+var height = window.innerHeight - 120;
+ctrSvg.attr("width", width)
+    .attr("height", height);
+
+var slotSvg = d3.select("#slotSvg");
+var slWidth = window.innerWidth * .18;
+var slHeight = window.innerHeight * 0.4;
+slotSvg.attr("width", slWidth)
+    .attr("height", slHeight);
+
+var fgText = "Appearances per Season Active";
+var fcText = "Appearances per Season";
+var wlText = "Win Percentage";
+
+var car1Grad = ctrSvg.append("linearGradient")
+				.attr("id", "car1Grad")
+				.attr("cx", "50%")
+				.attr("cy", "50%")
+                .attr("gradientTransform", "rotate(90)");
+
+				
+car1Grad.append("stop")
+        .attr("offset", "48%")
+        .attr("stop-color", "#e3655b");
+car1Grad.append("stop")
+        .attr("offset", "52%")
+        .attr("stop-color", "#9eecf0");
+
+var car2Grad = ctrSvg.append("linearGradient") //background
+				.attr("id", "car2Grad")
+				.attr("cx", "50%")
+				.attr("cy", "50%")
+                .attr("gradientTransform", "rotate(90)");
+				
+car2Grad.append("stop")
+        .attr("offset", "48%")
+        .attr("stop-color", "#e3655b");
+car2Grad.append("stop")
+        .attr("offset", "52%")
+        .attr("stop-color", "#c5b0d5");
+
+var car3Grad = ctrSvg.append("linearGradient") //background
+				.attr("id", "car3Grad")
+				.attr("cx", "50%")
+				.attr("cy", "50%")
+                .attr("gradientTransform", "rotate(90)");
+				
+car3Grad.append("stop")
+        .attr("offset", "48%")
+        .attr("stop-color", "#e3655b");
+car3Grad.append("stop")
+        .attr("offset", "52%")
+        .attr("stop-color", "#2463b9");
+
+var car4Grad = ctrSvg.append("linearGradient") //background
+				.attr("id", "car4Grad")
+				.attr("cx", "50%")
+				.attr("cy", "50%")
+                .attr("gradientTransform", "rotate(90)");
+				
+car4Grad.append("stop")
+        .attr("offset", "48%")
+        .attr("stop-color", "#e3655b");
+car4Grad.append("stop")
+        .attr("offset", "52%")
+        .attr("stop-color", "#fbb02d");
+
+var cargrGrad = ctrSvg.append("linearGradient") //background
+				.attr("id", "cargrGrad")
+				.attr("cx", "50%")
+				.attr("cy", "50%")
+                .attr("gradientTransform", "rotate(90)");
+				
+cargrGrad.append("stop")
+        .attr("offset", "48%")
+        .attr("stop-color", "#e3655b");
+cargrGrad.append("stop")
+        .attr("offset", "52%")
+        .attr("stop-color", "#cfd186");
+
+
+var carsmGrad = ctrSvg.append("linearGradient") //background
+				.attr("id", "carsmGrad")
+				.attr("cx", "50%")
+				.attr("cy", "50%")
+                .attr("gradientTransform", "rotate(90)");
+				
+carsmGrad.append("stop")
+        .attr("offset", "48%")
+        .attr("stop-color", "#e3655b");
+carsmGrad.append("stop")
+        .attr("offset", "52%")
+        .attr("stop-color", "#596157");
+
+var cashsmGrad = ctrSvg.append("linearGradient") //background
+				.attr("id", "cashsmGrad")
+				.attr("cx", "50%")
+				.attr("cy", "50%")
+                .attr("gradientTransform", "rotate(90)");
+				
+cashsmGrad.append("stop")
+        .attr("offset", "48%")
+        .attr("stop-color", "#2ca02c");
+cashsmGrad.append("stop")
+        .attr("offset", "52%")
+        .attr("stop-color", "#596157");
+
+var cashgrGrad = ctrSvg.append("linearGradient") //background
+        .attr("id", "cashgrGrad")
+        .attr("cx", "50%")
+        .attr("cy", "50%")
+        .attr("gradientTransform", "rotate(90)");
+				
+cashgrGrad.append("stop")
+        .attr("offset", "48%")
+        .attr("stop-color", "#2ca02c");
+cashgrGrad.append("stop")
+        .attr("offset", "52%")
+        .attr("stop-color", "#cfd186");
+
+
+//Removed rateById to store all county data instead of just 1 column
+var gameData = d3.map();
+var categoryData = d3.map();
+var games = [];
+var categories = ["CarGames", "CashGames", "GroceryProductGames", "SmallPrizeGames", "OnePrizeGames", "TwoPrizeGames", "ThreePrizeGames", "FourFivePrizeGames"];
+
+d3.select("#gameName").text("Game Metadata");
+
+d3.queue()
+    .defer(d3.tsv, "frequency.tsv"+'?' + Math.floor(Math.random() * 1000), function(d) {
+        gameData.set(d.PricingGame, {f1:d.f1, f2:d.f2, f3:d.f3, f4:d.f4, f5:d.f5, f6:d.f6,
+            f7:d.f7, f8:d.f8, f9:d.f9, f10:d.f10, f11:d.f11, f12:d.f12,
+            f13:d.f13, f14:d.f14, f15:d.f15, f16:d.f16, f17:d.f17, f18:d.f18,
+            f19:d.f19, f20:d.f20, f21:d.f21, f22:d.f22, f23:d.f23, f24:d.f24,
+            f25:d.f25, f26:d.f26, f27:d.f27, f28:d.f28, f29:d.f29, f30:d.f30,
+            f31:d.f31, f32:d.f2, f33:d.f33, f34:d.f34, f35:d.f35, f36:d.f36,
+            f37:d.f37, f38:d.f38, f39:d.f39, f40:d.f40, f41:d.f41, f42:d.f42,
+            f43:d.f43, f44:d.f44, f45:d.f45, f46:d.f46, f47:d.f47, fTotal:d.fTotal, fRank:d.fRank, fActive:d.fActive, Category:d.Category});
+        games.push(d.PricingGame);
+    })
+    .defer(d3.tsv, "winLoss.tsv"+'?' + Math.floor(Math.random() * 1000), function (d) {
+        let gd = gameData.get(d.PricingGame);
+        let newobj = {...gd, w29:d.w29, w30:d.w30,
+            w31:d.w31, w32:d.w32, w33:d.w33, w34:d.w34, w35:d.w35, w36:d.w36,
+            w37:d.w37, w38:d.w38, w39:d.w39, w40:d.w40, w41:d.w41, w42:d.w42,
+            w43:d.w43, w44:d.w44, w45:d.w45, w46:d.w46, w47:d.w47, wTotal:d.wTotal, wPct:d.wPct, wRank:d.wRank};
+
+        gameData.set(d.PricingGame, newobj);
+    })
+    .defer(d3.tsv, "gameSlots.tsv"+'?' + Math.floor(Math.random() * 1000), function(d) {
+        let gd = gameData.get(d.PricingGame);
+        let newobj = {...gd, s1:d.s1, s2:d.s2, s3:d.s3, s4:d.s4, s5:d.s5, s6:d.s6, sNA:d.sNA};
+        gameData.set(d.PricingGame, newobj);
+    })
+    .defer(d3.tsv, "category.tsv"+'?' + Math.floor(Math.random() * 1000), function(d) {
+        categoryData.set("CarGames", {wl:d.CarGames, niceText:"Car Games", color:"#e3655b", abbr:"car"});
+        categoryData.set("CashGames", {wl:d.CashGames, niceText:"Cash Games", color:"#2ca02c", abbr:"cash"});
+        categoryData.set("GroceryProductGames", {wl:d.GroceryProductGames, niceText:"Grocery Product Games", color:"#cfd186", abbr:"gr"});
+        categoryData.set("SmallPrizeGames", {wl:d.SmallPrizeGames, niceText:"Small Prize Games", color:"#596157", abbr:"sm"});
+        categoryData.set("OnePrizeGames", {wl:d.OnePrizeGames, niceText:"One Prize Games", color:"#9eecf0", abbr:"1"});
+        categoryData.set("TwoPrizeGames", {wl:d.TwoPrizeGames, niceText:"Two Prize Games", color:"#c5b0d5", abbr:"2"});
+        categoryData.set("ThreePrizeGames", {wl:d.ThreePrizeGames, niceText:"Three Prize Games", color:"#2463b9", abbr:"3"});
+        categoryData.set("FourFivePrizeGames", {wl:d.FourFivePrizeGames, niceText:"Four+ Prize Games", color:"#fbb02d", abbr:"4"});
+    })
+    .await(ready);
+
+// Add X axis
+var heightShift = height * 0.85 - 50;
+var widthShift = width * 0.06 + 50;
+
+
+
+var x;
+var y;
+var sy;
+var currentShape = 'circle';
+var tdone = false;
+
+function getFill(cat) {
+    if (!cat) {
+        return "black";
+    }
+    cat = cat.split(",");
+    if (cat.length == 1) 
+        return categoryData.get(cat[0]).color;
+    else {
+        console.log(cat);
+        return "url(#" + categoryData.get(cat[0]).abbr + categoryData.get(cat[1]).abbr + "Grad)";
+    }
+}
+
+function ready(error, data) {
+    let xr = (width * .96 - widthShift) / 2 + widthShift;
+    let yr = (heightShift - (height * 0.02)) / 2 + (height * 0.02);
+    console.log(yr)
+
+    x = d3.scaleLinear()
+    .domain([0, 40])
+    .range([ widthShift, width * 0.96]);
+    
+    y = d3.scaleLinear()
+    .range([ heightShift, height * 0.02]);
+
+    ctrSvg.append("g")
+        .attr("id", "xax")
+        .attr("transform", "translate(0," + heightShift + ")")
+        .call(d3.axisBottom(x));
+    ctrSvg.append("g")
+        .attr("id", "yax")
+        .attr("transform", "translate(" + widthShift + ",0)")
+        .call(d3.axisLeft(y));
+    ctrSvg.append("text")
+        .attr("id", "xLabel")
+        .attr("transform", "translate(" + xr + " ," + (heightShift + 50) + ")")
+        .style("text-anchor", "middle")
+        .text(fgText);
+    ctrSvg.append("text")
+        .attr("id", "yLabel")
+        .attr("transform", "translate(" + (widthShift - 50) + " ," + yr + "), rotate(-90)")
+        .style("text-anchor", "middle")
+        .text(wlText);
+    for (var i = 0; i < games.length; i++) {
+        let game = games[i];
+        if(gameData.get(game).wPct) {
+            ctrSvg.append("circle")
+                .attr("cx", function() { return x(parseFloat(gameData.get(game).fTotal) / parseFloat(gameData.get(game).fActive)); })
+                .attr("cy", function() { return y(parseFloat(gameData.get(game).wPct)); })
+                .attr("id", game)
+                .attr("r", height * width / 75000)
+                .style("fill", getFill(gameData.get(game).Category))
+                .on("mouseenter", function() {
+                    d3.select("#gameName").text(d3.select(this).attr("id"));
+                    populateSlotBar(gameData.get(d3.select(this).attr("id")));
+                });
+        }
+    }
+
+    sy = d3.scaleBand()
+            .range([slHeight * 0.98, slHeight * 0.02])
+            .domain(['?', '6', '5', '4', '3', '2', '1'])
+            .padding(0.1);
+
+    sx = d3.scaleLinear()
+           .range([slWidth * 0.1 + 30, slWidth * .6]);
+    
+    syr = ((slHeight * .98) - (slHeight * 0.02)) / 2 + slHeight * 0.02;
+
+
+    slotSvg.append("g")
+        .attr("id", "yax")
+        .attr("transform", "translate(" + (slWidth * 0.1 + 30) + ",0)")
+        .call(d3.axisLeft(sy));
+    slotSvg.append("text")
+        .attr("id", "syLabel")
+        .attr("transform", "translate(" + (slWidth * 0.1) + " ," + syr + "), rotate(-90)")
+        .style("text-anchor", "middle")
+        .text("Appearances per Game Slot in Show");
+
+    for (var i = 1; i < 8; i++) {
+        slotSvg.append('rect')
+            .attr("id", "slot" + i)
+            .style('fill', 'black')
+            .attr('x', slWidth * 0.1 + 30)
+            .attr('y', sy(i == 7 ? "?" : i.toString()))
+            .attr('height', sy.bandwidth())
+            .attr("width", 0);
+    }
+}
+
+function populateSlotBar(gd) {
+    d3.select("#metaApp").text("First Appearance: Season " + findFirstApp(gd));
+    d3.select("#metaCat").text("Categories: " + (gd.Category.split(',')[0] ? categoryData.get(gd.Category.split(',')[0]).niceText : "") + (gd.Category.split(',')[1] ? ", " + categoryData.get(gd.Category.split(',')[1]).niceText : ""));
+    d3.select("#metaTotal").text("Total Appearances: " + gd.fTotal);
+    d3.select("#metaFrank").text("Total Appearances Rank: " + gd.fRank);
+    d3.select("#metaActive").text("Seasons Active: " + gd.fActive);
+    d3.select("#metaWPct").text("Overall Win Percentage: " + (gd.wPct ? gd.wPct : "unavailable"));
+
+    if (!gd.s1) { clearSlotBar(); return; }
+
+    slots = [gd.s1, gd.s2, gd.s3, gd.s4, gd.s5, gd.s6, gd.sNA];
+    sx.domain([0, d3.max(slots, function(s) { return parseInt(s); })]);
+    
+    for (var i = 1; i < 8; i++) {
+        d3.select("#slot" + i.toString() )
+        .transition()
+        .attr('width', function() { 
+            return sx(parseInt(slots[i-1])); 
+        })
+        .style("fill", getFill(gd.Category))
+        .duration(200);
+    }
+}
+
+function findFirstApp(gd) {
+    var seasons = [gd.f1, gd.f2, gd.f3, gd.f4, gd.f5, gd.f6, gd.f7, gd.f8, gd.f9, gd.f10, 
+                    gd.f11, gd.f12, gd.f13, gd.f14, gd.f15, gd.f16, gd.f17, gd.f18, gd.f19, gd.f20, 
+                    gd.f21, gd.f22, gd.f23, gd.f24, gd.f25, gd.f26, gd.f27, gd.f28, gd.f29, gd.f30,
+                    gd.f31, gd.f32, gd.f33, gd.f34, gd.f35, gd.f36, gd.f37, gd.f38, gd.f39, gd.f40, 
+                    gd.f41, gd.f42, gd.f43, gd.f44, gd.f45, gd.f46, gd.f47];
+    for (var i = 0; i < seasons.length; i++) {
+        if (seasons[i] != '-') return (i + 1);
+    }
+}
+
+function clearSlotBar() {
+    for (var i = 1; i < 8; i++) {
+        d3.select("#slot" + i.toString() )
+        .transition()
+        .attr('width', 0)
+        .duration(200);
+    }
+}
+
+function createBar(bars, map) {
+    y.domain([0, d3.max(bars, function(g) { return g.val })])
+    x = d3.scaleBand()
+          .range([widthShift, width*0.96])
+          .padding(0.1)
+          .domain(bars.map((b) => b.name));
+    d3.select("#xax").call(d3.axisBottom(x))
+            .selectAll("text")	
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                return "rotate(-65)" 
+                });;
+    d3.select("#yax").call(d3.axisLeft(y));
+    d3.select("#xLabel").text("");
+
+    for (var i = 0; i < bars.length; i++) {
+        let game = bars[i].name;
+        ctrSvg.append('rect')
+            .attr("id", game)
+            .style('fill', getFill(gameData.get(game).Category))
+            .attr('x', x(game))
+            .attr('y', heightShift)
+            .attr('width', x.bandwidth())
+            .on("mouseenter", function() {
+                d3.select("#gameName").text(d3.select(this).attr("id"));
+                populateSlotBar(gameData.get(d3.select(this).attr("id")));
+            });
+    }
+    ctrSvg.selectAll('rect')
+      .transition()
+      .attr('y', function() {
+            var game = d3.select(this).attr("id");
+            var elem = bars.find(function(element) { return game == element.name });
+            return y(elem.val);
+        })
+      .attr('height', function() { 
+            var game = d3.select(this).attr("id");
+            var elem = bars.find(function(element) { return game == element.name });
+            return (heightShift) -  y(elem.val); 
+        })
+      .duration(1000);
+
+}
+
+function createScatter(pts, map) {
+    x = d3.scaleLinear()
+    .domain([0, d3.max(pts, function(p) { return parseFloat(map.get(p.name).fTotal) / parseFloat(map.get(p.name).fActive) })])
+    .range([ widthShift, width * 0.96]);
+    
+    y = d3.scaleLinear()
+    .range([ heightShift, height * 0.02])
+    .domain([0, 1]);
+
+    d3.select("#xax").call(d3.axisBottom(x));
+    d3.select("#yax").call(d3.axisLeft(y));
+    d3.select("#xLabel").text(fgText);
+    d3.select("#yLabel").text(wlText);
+
+
+    for (var i = 0; i < pts.length; i++) {
+        let game = pts[i].name;
+        ctrSvg.append("circle")
+            .attr("cx", function() { return x(parseFloat(gameData.get(game).fTotal) / parseFloat(gameData.get(game).fActive)); })
+            .attr("cy", function() { return heightShift; })
+            .attr("id", game)
+            .attr("r", height * width / 75000)
+            .style("fill", getFill(map.get(game).Category))
+            .on("mouseenter", function() {
+                d3.select("#gameName").text(d3.select(this).attr("id"));
+                populateSlotBar(gameData.get(d3.select(this).attr("id")));
+            });
+    }
+    d3.selectAll('circle')
+      .transition()
+      .attr('cy', function() {
+            var game = d3.select(this).attr("id");
+            return y(map.get(game).wPct);
+        })
+      .duration(1000);
+}
+
+function createBarCat(bars, map) {
+    y.domain([0, d3.max(bars, function(g) { return g.val })])
+    x = d3.scaleBand()
+          .range([widthShift, width*0.96])
+          .padding(0.1)
+          .domain(bars.map((b) => b.name));
+    d3.select("#xax").call(d3.axisBottom(x))
+            .selectAll("text")	
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                return "rotate(-65)" 
+                });
+    d3.select("#yax").call(d3.axisLeft(y));
+    d3.select("#xLabel").text("");
+
+    for (var i = 0; i < bars.length; i++) {
+        let cat = bars[i].name;
+        ctrSvg.append('rect')
+            .attr("id", cat)
+            .style('fill', categoryData.get(cat).color)
+            .attr('x', x(cat))
+            .attr('y', heightShift)
+            .attr('width', x.bandwidth());
+    }
+    ctrSvg.selectAll('rect')
+      .transition()
+      .attr('y', function() {
+            var cat = d3.select(this).attr("id");
+            var elem = bars.find(function(element) { return cat == element.name });
+            return y(elem.val);
+        })
+      .attr('height', function() { 
+            var cat = d3.select(this).attr("id");
+            var elem = bars.find(function(element) { return cat == element.name });
+            return (heightShift) -  y(elem.val); 
+        })
+      .duration(1000);
+
+}
+
+function createScatterCat(pts, map) {
+    x = d3.scaleLinear()
+    .domain([0, d3.max(pts, function(p) { return p.freq })])
+    .range([ width * 0.06, width * 0.96]);
+    
+    y = d3.scaleLinear()
+    .range([ heightShift, height * 0.02])
+    .domain([0, 1]);
+
+    d3.select("#xax").call(d3.axisBottom(x));
+    d3.select("#yax").call(d3.axisLeft(y));
+    d3.select("#xLabel").text(fcText);
+    d3.select("#yLabel").text(wlText);
+
+    for (var i = 0; i < pts.length; i++) {
+        let cat = pts[i];
+        ctrSvg.append("circle")
+            .attr("cx", function() { return x(cat.freq); })
+            .attr("cy", function() { return heightShift; })
+            .attr("id", cat.name)
+            .attr("r", height * width / 75000)
+            .style("fill", map.get(cat.name).color);
+    }
+    d3.selectAll('circle')
+      .transition()
+      .attr('cy', function() {
+            var cat = d3.select(this).attr("id");
+            return y(pts.find(function(element) { return cat == element.name }).pct);
+        })
+      .duration(1000);
+}
+
+
+function remakeGraphic(item, plot, arr, map, func) {
+    if (item == 'circle') {
+        d3.selectAll(item)
+            .transition()
+            .style("opacity", 0)
+            .attr('cy', heightShift)
+            .duration(1000)
+            .remove()
+            .call(endAll, func, plot, arr, map); 
+    } else {
+        ctrSvg.selectAll(item)
+            .transition()
+            .style("opacity", 0)
+            .attr('y', heightShift)
+            .attr('height', 0)
+            .duration(1000)
+            .remove()
+            .call(endAll, func, plot, arr, map);
+    }
+}
+
+
+function endAll(transition, callback, plot, arr, map) {
+  var n = 0
+  transition.each(() => ++n)
+    .on('end', function () {
+        !--n;
+        if (n == 0) callback(plot, arr, map);
+    });
+}
+
+function nextGraphicGame(plot, arr, map) {
+    if (plot == 'fwl') {
+            createScatter(arr, map);
+            currentShape = 'circle';
+    } else {
+            createBar(arr, map);
+            currentShape = 'rect';
+    }
+}
+
+function nextGraphicCat(plot, arr, map) {
+    if (plot == 'fwl') {
+            createScatterCat(arr, map);
+            currentShape = 'circle';
+    } else {
+            createBarCat(arr, map);
+            currentShape = 'rect';
+    }
+}
+
+document.getElementById("updateViz").onclick = async function() {
+    clearSlotBar();
+    d3.select("#gameName").text("Game Metadata");
+    d3.select("#metaApp").text("First Appearance:");
+    d3.select("#metaCat").text("Categories: ");
+    d3.select("#metaTotal").text("Total Appearances: ");
+    d3.select("#metaFrank").text("Total Appearances Rank: ");
+    d3.select("#metaActive").text("Seasons Active: ");
+    d3.select("#metaWPct").text("Overall Win Percentage: ");
+    var categSel = document.getElementById("Categories");
+    var viewSel = document.getElementById("View");
+    var plotSel = document.getElementById("Plot");
+    var actSel = document.getElementById("Active");
+    var categ = categSel.options[categSel.selectedIndex].value;
+    var view = viewSel.options[viewSel.selectedIndex].value;
+    var plot = plotSel.options[plotSel.selectedIndex].value;
+    var act = actSel.options[actSel.selectedIndex].value;
+    var arr = getInitArr(categ);
+    if (categ != 'cat' && act == 'y') {
+        arr = removeInactive(arr);
+    }
+    if (categ != 'cat') arr = trimSortArr(arr, view, plot);
+    else arr = modCatArr(arr, plot);
+    d3.select("#yLabel").text(plot == 'fr' ? (categ == 'cat' ? fcText : fgText) : wlText);
+    remakeGraphic(currentShape, plot, arr, categ == 'cat' ? categoryData : gameData, categ == 'cat' ? nextGraphicCat : nextGraphicGame);
+}
+
+function getInitArr(categ) {
+    var arr = [];
+    switch(categ) {
+        case "all":
+            arr = games;
+            break;
+        case "cat":
+            arr = categories.map(c => { return {name:c, wl:categoryData.get(c).wl} });
+            break;
+        default:
+            let c = ""
+            switch (categ) {
+                case "car":
+                    c = "CarGames";
+                    break;
+                case "cash":
+                    c = "CashGames";
+                    break;
+                case "small":
+                    c = "SmallPrizeGames";
+                    break;
+                case "grocery":
+                    c = "GroceryProductGames";
+                    break;
+                case "onep":
+                    c = "OnePrizeGames"
+                    break;
+                case "twop":
+                    c = "TwoPrizeGames"
+                    break;
+                case "threep":
+                    c = "ThreePrizeGames"
+                    break;
+                case "fourp":
+                    c = "FourFivePrizeGames"
+            }    
+            for (var i = 0; i < games.length; i++) {
+                if (gameData.get(games[i]).Category.split(',').includes(c))
+                    arr.push(games[i]);
+            }
+    }
+    return arr;
+}
+
+function removeInactive(arr) {
+    for (var i = 0; i < arr.length; i++) {
+        if (gameData.get(arr[i]).f47 == '-') {
+            arr.splice(i, 1);
+            i--;
+        }
+    }
+    return arr;
+}
+
+function trimSortArr(arr, view, plot) {
+    temp = [];
+    var itemVal;
+    var maxfr = d3.max(arr, function(a) { return parseFloat(gameData.get(a).fTotal) / parseFloat(gameData.get(a).fActive);  });
+
+    for (var i = 0; i < arr.length; i++) {
+        if (plot == 'fwl') {
+            if (gameData.get(arr[i]).wPct != undefined) //rethink rankings here
+                itemVal = parseFloat(gameData.get(arr[i]).fTotal) / parseFloat(gameData.get(arr[i]).fActive) / maxfr + parseFloat(gameData.get(arr[i]).wPct);
+            else
+                continue;
+        } else if (plot == "fr") {
+            itemVal = parseFloat(gameData.get(arr[i]).fTotal) / parseFloat(gameData.get(arr[i]).fActive);
+        } else {
+            if (gameData.get(arr[i]).wPct != undefined) {
+                itemVal = parseFloat(gameData.get(arr[i]).wPct);
+            }
+            else
+                continue;
+        }
+        if (view == 'all' || temp.length < parseInt(view)) {
+            temp.push({name:arr[i], val:itemVal});
+            temp.sort((a,b) => {
+                if (a.val < b.val) return -1;
+                else if (a.val == b.val) return 0;
+                else return 1;
+            });
+        }
+        else if (itemVal) {
+            if (temp[0].val < itemVal) {
+                temp[0] = {name:arr[i], val:itemVal};
+                temp.sort((a,b) => {
+                    if (a.val < b.val) return -1;
+                    else if (a.val == b.val) return 0;
+                    else return 1;
+                });
+            }
+        }
+    }
+    return temp;
+}
+
+function modCatArr(arr, plot) {
+    if (plot == 'fwl') {
+        arr = arr.map(p => { 
+            let catName = p.name;
+            let wl = p.wl.split('-');
+            wl[0] = parseInt(wl[0]);
+            wl[1] = parseInt(wl[1]);
+            let freq = (wl[0] + wl[1]) / 19;
+            let pct = wl[0] / (wl[0] + wl[1]);
+            return {name:catName, freq:freq, pct:pct};
+        }); 
+    } else if (plot == 'fr') {
+        arr = arr.map(p => { 
+            let catName = p.name;
+            let wl = p.wl.split('-');
+            wl[0] = parseInt(wl[0]);
+            wl[1] = parseInt(wl[1]);
+            let freq = (wl[0] + wl[1]) / 19;
+            return {name:catName, val:freq};
+        });
+        arr = arr.sort((a,b) => {
+            if (a.val < b.val) return -1;
+            else if (a.val == b.val) return 0;
+            else return 1;
+        });
+    } else {
+        arr = arr.map(p => { 
+            let catName = p.name;
+            let wl = p.wl.split('-');
+            wl[0] = parseInt(wl[0]);
+            wl[1] = parseInt(wl[1]);
+            let pct = wl[0] / (wl[0] + wl[1]);
+            return {name:catName, val:pct};
+        });
+        arr = arr.sort((a,b) => {
+            if (a.val < b.val) return -1;
+            else if (a.val == b.val) return 0;
+            else return 1;
+        })
+    }
+    return arr;
+}
+
+</script>
