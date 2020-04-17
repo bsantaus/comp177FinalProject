@@ -133,9 +133,8 @@ var wlText = "Win %";
 var car1Grad = ctrSvg.append("linearGradient")
 				.attr("id", "car1Grad")
 				.attr("cx", "50%")
-				.attr("cy", "50%")
-                .attr("gradientTransform", "rotate(45)");
-
+				.attr("cy", "50%");
+        
 				
 car1Grad.append("stop")
         .attr("offset", "50%")
@@ -147,9 +146,8 @@ car1Grad.append("stop")
 var car2Grad = ctrSvg.append("linearGradient") //background
 				.attr("id", "car2Grad")
 				.attr("cx", "50%")
-				.attr("cy", "50%")
-                .attr("gradientTransform", "rotate(45)");
-				
+				.attr("cy", "50%");
+        				
 car2Grad.append("stop")
         .attr("offset", "50%")
         .attr("stop-color", "#e3655b");
@@ -160,9 +158,8 @@ car2Grad.append("stop")
 var car3Grad = ctrSvg.append("linearGradient") //background
 				.attr("id", "car3Grad")
 				.attr("cx", "50%")
-				.attr("cy", "50%")
-                .attr("gradientTransform", "rotate(45)");
-				
+				.attr("cy", "50%");
+        				
 car3Grad.append("stop")
         .attr("offset", "50%")
         .attr("stop-color", "#e3655b");
@@ -173,9 +170,8 @@ car3Grad.append("stop")
 var car4Grad = ctrSvg.append("linearGradient") //background
 				.attr("id", "car4Grad")
 				.attr("cx", "50%")
-				.attr("cy", "50%")
-                .attr("gradientTransform", "rotate(45)");
-				
+				.attr("cy", "50%");
+        				
 car4Grad.append("stop")
         .attr("offset", "50%")
         .attr("stop-color", "#e3655b");
@@ -186,9 +182,8 @@ car4Grad.append("stop")
 var cargrGrad = ctrSvg.append("linearGradient") //background
 				.attr("id", "cargrGrad")
 				.attr("cx", "50%")
-				.attr("cy", "50%")
-                .attr("gradientTransform", "rotate(45)");
-				
+				.attr("cy", "50%");
+        				
 cargrGrad.append("stop")
         .attr("offset", "50%")
         .attr("stop-color", "#e3655b");
@@ -200,9 +195,8 @@ cargrGrad.append("stop")
 var carsmGrad = ctrSvg.append("linearGradient") //background
 				.attr("id", "carsmGrad")
 				.attr("cx", "50%")
-				.attr("cy", "50%")
-                .attr("gradientTransform", "rotate(45)");
-				
+				.attr("cy", "50%");
+        				
 carsmGrad.append("stop")
         .attr("offset", "50%")
         .attr("stop-color", "#e3655b");
@@ -213,9 +207,8 @@ carsmGrad.append("stop")
 var cashsmGrad = ctrSvg.append("linearGradient") //background
 				.attr("id", "cashsmGrad")
 				.attr("cx", "50%")
-				.attr("cy", "50%")
-                .attr("gradientTransform", "rotate(45)");
-				
+				.attr("cy", "50%");
+        				
 cashsmGrad.append("stop")
         .attr("offset", "50%")
         .attr("stop-color", "#2ca02c");
@@ -226,8 +219,7 @@ cashsmGrad.append("stop")
 var cashgrGrad = ctrSvg.append("linearGradient") //background
         .attr("id", "cashgrGrad")
         .attr("cx", "50%")
-        .attr("cy", "50%")
-        .attr("gradientTransform", "rotate(45)");
+        .attr("cy", "50%");
 				
 cashgrGrad.append("stop")
         .attr("offset", "50%")
@@ -344,7 +336,7 @@ function ready(error, data) {
         if(gameData.get(game).wPct) {
             ctrSvg.append("circle")
                 .attr("cx", function() { return x(parseFloat(gameData.get(game).fTotal) / parseFloat(gameData.get(game).fActive)); })
-                .attr("cy", function() { return y(parseFloat(gameData.get(game).wPct * 100)); })
+                .attr("cy", function() { return y(parseFloat(gameData.get(game).wPct) * 100); })
                 .attr("id", game)
                 .attr("r", height * width / 75000)
                 .style("fill", getFill(gameData.get(game).Category))
@@ -509,7 +501,7 @@ function createScatter(pts, map) {
       .transition()
       .attr('cy', function() {
             var game = d3.select(this).attr("id");
-            return y(map.get(game).wPct * 100);
+            return y(parseFloat(map.get(game).wPct) * 100);
         })
       .duration(1000);
 }
