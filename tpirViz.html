@@ -40,6 +40,12 @@ html,body {
     height:5%;
 }
 
+.legendItem {
+    height:3%;
+    width:100%;
+    padding:12px;
+}
+
 </style>
 
 <!--Category: S29-47, Frequency: S1-47, Slots: S16-47, W/L: S29-47-->
@@ -81,15 +87,16 @@ html,body {
             <option value="y">Yes</option>
         </select><br>
         <button id="updateViz">Update</button><br>
-        <div style="background-color: #e3655b;">Car Games</div><br>
-        <div style="background-color: #2ca02c;">Cash Games</div><br>
-        <div style="background-color: #cfd186;">Grocery Product Games</div><br>
-        <div style="background-color: #596157;"><font color="white">Small Prize Games</font></div><br>
-        <div style="background-color: #9eecf0;"><font color="black">One Prize Games</font></div><br>
-        <div style="background-color: #c5b0d5;">Two Prize Games</div><br>
-        <div style="background-color: #2463b9;"><font color="white">Three Prize Games</font></div><br>
-        <div style="background-color: #fbb02d;">Four+ Prize Games</div><br>
-        <div style="background-color: black;"><font color="white">No Category Available</font></div>
+        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #e3655b;"></div><div class="column" style="width:60%"><font color="black">Car Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #2ca02c;"></div><div class="column" style="width:60%"><font color="black">Cash Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #fbb02d;"></div><div class="column" style="width:60%"><font color="black">Grocery Product Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #B04CC8;"></div><div class="column" style="width:60%"><font color="black">Small Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #abbafc;"></div><div class="column" style="width:60%"><font color="black">One Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #7485cb;"></div><div class="column" style="width:60%"><font color="black">Two Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #3d509a;"></div><div class="column" style="width:60%"><font color="black">Three Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #061c6a;"></div><div class="column" style="width:60%"><font color="black">Four+ Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #a1a1a1;"></div><div class="column" style="width:60%"><font color="black">No Category Available</font></div></div>
+
     </div>
     <div id="ctrSvgDiv" class="column ctrSvg">
         <svg id="ctrSvg"></svg>
@@ -130,6 +137,15 @@ var fgText = "Appearances per Season Active";
 var fcText = "Appearances per Season";
 var wlText = "Win %";
 
+var carColor = "#e3655b";
+var cashColor = "#2ca02c";
+var smallColor = "#B04CC8";
+var groceryColor = "#fbb02d";
+var oneColor = "#abbafc";
+var twoColor = "#7485cb";
+var threeColor = "#3d509a";
+var fourColor = "#061c6a";
+
 var car1Grad = ctrSvg.append("linearGradient")
 				.attr("id", "car1Grad")
 				.attr("cx", "50%")
@@ -138,10 +154,10 @@ var car1Grad = ctrSvg.append("linearGradient")
 				
 car1Grad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#e3655b");
+        .attr("stop-color", carColor);
 car1Grad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#9eecf0");
+        .attr("stop-color", oneColor);
 
 var car2Grad = ctrSvg.append("linearGradient") //background
 				.attr("id", "car2Grad")
@@ -150,10 +166,10 @@ var car2Grad = ctrSvg.append("linearGradient") //background
         				
 car2Grad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#e3655b");
+        .attr("stop-color", carColor);
 car2Grad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#c5b0d5");
+        .attr("stop-color", twoColor);
 
 var car3Grad = ctrSvg.append("linearGradient") //background
 				.attr("id", "car3Grad")
@@ -162,10 +178,10 @@ var car3Grad = ctrSvg.append("linearGradient") //background
         				
 car3Grad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#e3655b");
+        .attr("stop-color", carColor);
 car3Grad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#2463b9");
+        .attr("stop-color", threeColor);
 
 var car4Grad = ctrSvg.append("linearGradient") //background
 				.attr("id", "car4Grad")
@@ -174,10 +190,10 @@ var car4Grad = ctrSvg.append("linearGradient") //background
         				
 car4Grad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#e3655b");
+        .attr("stop-color", carColor);
 car4Grad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#fbb02d");
+        .attr("stop-color", fourColor);
 
 var cargrGrad = ctrSvg.append("linearGradient") //background
 				.attr("id", "cargrGrad")
@@ -186,10 +202,10 @@ var cargrGrad = ctrSvg.append("linearGradient") //background
         				
 cargrGrad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#e3655b");
+        .attr("stop-color", carColor);
 cargrGrad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#cfd186");
+        .attr("stop-color", groceryColor);
 
 
 var carsmGrad = ctrSvg.append("linearGradient") //background
@@ -199,10 +215,10 @@ var carsmGrad = ctrSvg.append("linearGradient") //background
         				
 carsmGrad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#e3655b");
+        .attr("stop-color", carColor);
 carsmGrad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#596157");
+        .attr("stop-color", smallColor);
 
 var cashsmGrad = ctrSvg.append("linearGradient") //background
 				.attr("id", "cashsmGrad")
@@ -211,10 +227,10 @@ var cashsmGrad = ctrSvg.append("linearGradient") //background
         				
 cashsmGrad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#2ca02c");
+        .attr("stop-color", cashColor);
 cashsmGrad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#596157");
+        .attr("stop-color", smallColor);
 
 var cashgrGrad = ctrSvg.append("linearGradient") //background
         .attr("id", "cashgrGrad")
@@ -223,10 +239,123 @@ var cashgrGrad = ctrSvg.append("linearGradient") //background
 				
 cashgrGrad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#2ca02c");
+        .attr("stop-color", cashColor);
 cashgrGrad.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", "#cfd186");
+        .attr("stop-color", groceryColor);
+
+var car1GradSlot = ctrSvg.append("linearGradient")
+        .attr("id", "car1GradSlot")
+        .attr("cx", "50%")
+        .attr("cy", "50%")
+        .attr("gradientTransform", "rotate(90)");
+        
+				
+car1GradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", carColor);
+car1GradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", oneColor);
+
+var car2GradSlot = ctrSvg.append("linearGradient") //background
+				.attr("id", "car2GradSlot")
+				.attr("cx", "50%")
+				.attr("cy", "50%")
+                .attr("gradientTransform", "rotate(90)");
+
+        				
+car2GradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", carColor);
+car2GradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", twoColor);
+
+var car3GradSlot = ctrSvg.append("linearGradient") //background
+				.attr("id", "car3GradSlot")
+				.attr("cx", "50%")
+				.attr("cy", "50%")
+                .attr("gradientTransform", "rotate(90)");
+
+        				
+car3GradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", carColor);
+car3GradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", threeColor);
+
+var car4GradSlot = ctrSvg.append("linearGradient") //background
+				.attr("id", "car4GradSlot")
+				.attr("cx", "50%")
+				.attr("cy", "50%")
+                .attr("gradientTransform", "rotate(90)");
+
+        				
+car4GradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", carColor);
+car4GradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", fourColor);
+
+var cargrGradSlot = ctrSvg.append("linearGradient") //background
+				.attr("id", "cargrGradSlot")
+				.attr("cx", "50%")
+				.attr("cy", "50%")
+                .attr("gradientTransform", "rotate(90)");
+
+        				
+cargrGradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", carColor);
+cargrGradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", groceryColor);
+
+
+var carsmGradSlot = ctrSvg.append("linearGradient") //background
+				.attr("id", "carsmGradSlot")
+				.attr("cx", "50%")
+				.attr("cy", "50%")
+                .attr("gradientTransform", "rotate(90)");
+
+        				
+carsmGradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", carColor);
+carsmGradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", smallColor);
+
+var cashsmGradSlot = ctrSvg.append("linearGradient") //background
+				.attr("id", "cashsmGradSlot")
+				.attr("cx", "50%")
+				.attr("cy", "50%")
+                .attr("gradientTransform", "rotate(90)");
+
+        				
+cashsmGradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", cashColor);
+cashsmGradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", smallColor);
+
+var cashgrGradSlot = ctrSvg.append("linearGradient") //background
+        .attr("id", "cashgrGradSlot")
+        .attr("cx", "50%")
+        .attr("cy", "50%")
+        .attr("gradientTransform", "rotate(90)");
+
+				
+cashgrGradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", cashColor);
+cashgrGradSlot.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", groceryColor);
 
 
 //Removed rateById to store all county data instead of just 1 column
@@ -234,6 +363,11 @@ var gameData = d3.map();
 var categoryData = d3.map();
 var games = [];
 var categories = ["CarGames", "CashGames", "GroceryProductGames", "SmallPrizeGames", "OnePrizeGames", "TwoPrizeGames", "ThreePrizeGames", "FourFivePrizeGames"];
+
+var currCat = "all";
+var currView = "all";
+var currPlot = "fwl";
+var currAct = "no";
 
 d3.select("#gameName").text("Game Metadata");
 
@@ -265,13 +399,13 @@ d3.queue()
     })
     .defer(d3.tsv, "category.tsv"+'?' + Math.floor(Math.random() * 1000), function(d) {
         categoryData.set("CarGames", {wl:d.CarGames, niceText:"Car Games", color:"#e3655b", abbr:"car"});
-        categoryData.set("CashGames", {wl:d.CashGames, niceText:"Cash Games", color:"#2ca02c", abbr:"cash"});
-        categoryData.set("GroceryProductGames", {wl:d.GroceryProductGames, niceText:"Grocery Product Games", color:"#cfd186", abbr:"gr"});
-        categoryData.set("SmallPrizeGames", {wl:d.SmallPrizeGames, niceText:"Small Prize Games", color:"#596157", abbr:"sm"});
-        categoryData.set("OnePrizeGames", {wl:d.OnePrizeGames, niceText:"One Prize Games", color:"#9eecf0", abbr:"1"});
-        categoryData.set("TwoPrizeGames", {wl:d.TwoPrizeGames, niceText:"Two Prize Games", color:"#c5b0d5", abbr:"2"});
-        categoryData.set("ThreePrizeGames", {wl:d.ThreePrizeGames, niceText:"Three Prize Games", color:"#2463b9", abbr:"3"});
-        categoryData.set("FourFivePrizeGames", {wl:d.FourFivePrizeGames, niceText:"Four+ Prize Games", color:"#fbb02d", abbr:"4"});
+        categoryData.set("CashGames", {wl:d.CashGames, niceText:"Cash Games", color:cashColor, abbr:"cash"});
+        categoryData.set("GroceryProductGames", {wl:d.GroceryProductGames, niceText:"Grocery Product Games", color:groceryColor, abbr:"gr"});
+        categoryData.set("SmallPrizeGames", {wl:d.SmallPrizeGames, niceText:"Small Prize Games", color:smallColor, abbr:"sm"});
+        categoryData.set("OnePrizeGames", {wl:d.OnePrizeGames, niceText:"One Prize Games", color:oneColor, abbr:"1"});
+        categoryData.set("TwoPrizeGames", {wl:d.TwoPrizeGames, niceText:"Two Prize Games", color:twoColor, abbr:"2"});
+        categoryData.set("ThreePrizeGames", {wl:d.ThreePrizeGames, niceText:"Three Prize Games", color:threeColor, abbr:"3"});
+        categoryData.set("FourFivePrizeGames", {wl:d.FourFivePrizeGames, niceText:"Four+ Prize Games", color:fourColor, abbr:"4"});
     })
     .await(ready);
 
@@ -297,6 +431,19 @@ function getFill(cat) {
     else {
         console.log(cat);
         return "url(#" + categoryData.get(cat[0]).abbr + categoryData.get(cat[1]).abbr + "Grad)";
+    }
+}
+
+function getFillSlot(cat) {
+    if (!cat) {
+        return "black";
+    }
+    cat = cat.split(",");
+    if (cat.length == 1) 
+        return categoryData.get(cat[0]).color;
+    else {
+        console.log(cat);
+        return "url(#" + categoryData.get(cat[0]).abbr + categoryData.get(cat[1]).abbr + "GradSlot)";
     }
 }
 
@@ -385,12 +532,13 @@ function populateSlotBar(gd) {
     d3.select("#metaTotal").text("Total Appearances: " + gd.fTotal);
     d3.select("#metaFrank").text("Total Appearances Rank: " + gd.fRank);
     d3.select("#metaActive").text("Seasons Active: " + gd.fActive);
-    d3.select("#metaWPct").text("Overall Win %: " + (gd.wPct ? (gd.wPct * 100) + "%": "unavailable"));
+    d3.select("#metaWPct").text("Overall Win %: " + (gd.wPct ? (gd.wPct * 100).toFixed(2) + "%": "unavailable"));
 
     if (!gd.s1) { clearSlotBar(); return; }
 
     slots = [gd.s1, gd.s2, gd.s3, gd.s4, gd.s5, gd.s6, gd.sNA];
     sx.domain([0, d3.max(slots, function(s) { return parseInt(s); })]);
+    let grad = getFillSlot(gd.Category);
     
     for (var i = 1; i < 8; i++) {
         d3.select("#slot" + i.toString() )
@@ -398,7 +546,7 @@ function populateSlotBar(gd) {
         .attr('width', function() { 
             return sx(parseInt(slots[i-1])); 
         })
-        .style("fill", getFill(gd.Category))
+        .style("fill", grad)
         .duration(200);
     }
 }
@@ -632,7 +780,9 @@ function nextGraphicCat(plot, arr, map) {
     }
 }
 
-document.getElementById("updateViz").onclick = async function() {
+document.getElementById("updateViz").onclick = updateViz;
+
+function updateViz() {
     clearSlotBar();
     d3.select("#gameName").text("Game Metadata");
     d3.select("#metaApp").text("First Appearance:");
@@ -645,18 +795,18 @@ document.getElementById("updateViz").onclick = async function() {
     var viewSel = document.getElementById("View");
     var plotSel = document.getElementById("Plot");
     var actSel = document.getElementById("Active");
-    var categ = categSel.options[categSel.selectedIndex].value;
-    var view = viewSel.options[viewSel.selectedIndex].value;
-    var plot = plotSel.options[plotSel.selectedIndex].value;
-    var act = actSel.options[actSel.selectedIndex].value;
-    var arr = getInitArr(categ);
-    if (categ != 'cat' && act == 'y') {
+    currCat = categSel.options[categSel.selectedIndex].value;
+    currView = viewSel.options[viewSel.selectedIndex].value;
+    currPlot = plotSel.options[plotSel.selectedIndex].value;
+    currAct = actSel.options[actSel.selectedIndex].value;
+    var arr = getInitArr(currCat);
+    if (currCat != 'cat' && currAct == 'y') {
         arr = removeInactive(arr);
     }
-    if (categ != 'cat') arr = trimSortArr(arr, view, plot);
-    else arr = modCatArr(arr, plot);
-    d3.select("#yLabel").text(plot == 'fr' ? (categ == 'cat' ? fcText : fgText) : wlText);
-    remakeGraphic(currentShape, plot, arr, categ == 'cat' ? categoryData : gameData, categ == 'cat' ? nextGraphicCat : nextGraphicGame);
+    if (currCat != 'cat') arr = trimSortArr(arr, currView, currPlot);
+    else arr = modCatArr(arr, currPlot);
+    d3.select("#yLabel").text(currPlot == 'fr' ? (currCat == 'cat' ? fcText : fgText) : wlText);
+    remakeGraphic(currentShape, currPlot, arr, currCat == 'cat' ? categoryData : gameData, currCat == 'cat' ? nextGraphicCat : nextGraphicGame);
 }
 
 function getInitArr(categ) {
