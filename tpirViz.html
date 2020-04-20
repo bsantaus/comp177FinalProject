@@ -10,7 +10,8 @@ html,body {
 
 .column {
     float:left;
-    height:100%;
+    height:85%;
+    padding:1%;
 }
 
 .row {
@@ -24,16 +25,16 @@ html,body {
 }
 
 .opt {
-    width:15%;
+    width:18%;
 }
 
 .ctrSvg {
-    width:60%;
+    width:55%;
 }
 
 .meta {
     margin-left:2%;
-    width:23%;
+    width:18%;
 }
 
 .metaName {
@@ -41,9 +42,9 @@ html,body {
 }
 
 .legendItem {
-    height:3%;
+    height:4%;
     width:100%;
-    padding:12px;
+    padding:14px;
 }
 
 </style>
@@ -53,7 +54,7 @@ html,body {
 <div style="display:flex; flex-flow:column; height:100%;">
 <div style="height:120px;"><h1>The Price Is Right Pricing Games</h1></div><br>
 <div class="row">
-    <div class="column opt">
+    <div class="column opt" style="background-color:#d0f5df; border-radius:5px;">
         <label for="Categories">Category:</label>
         <select id="Categories">
             <option value="all">All Games</option>
@@ -87,21 +88,21 @@ html,body {
             <option value="y">Yes</option>
         </select><br>
         <button id="updateViz">Update</button><br>
-        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #e3655b;"></div><div class="column" style="width:60%"><font color="black">Car Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #2ca02c;"></div><div class="column" style="width:60%"><font color="black">Cash Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #fbb02d;"></div><div class="column" style="width:60%"><font color="black">Grocery Product Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #B04CC8;"></div><div class="column" style="width:60%"><font color="black">Small Prize Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #abbafc;"></div><div class="column" style="width:60%"><font color="black">One Prize Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #7485cb;"></div><div class="column" style="width:60%"><font color="black">Two Prize Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #3d509a;"></div><div class="column" style="width:60%"><font color="black">Three Prize Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #061c6a;"></div><div class="column" style="width:60%"><font color="black">Four+ Prize Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="margin-right:10px; height:100%; width:20%; background-color: #a1a1a1;"></div><div class="column" style="width:60%"><font color="black">No Category Available</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #e3655b;"></div><div class="column" style="width:60%"><font color="black">Car Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #2ca02c;"></div><div class="column" style="width:60%"><font color="black">Cash Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #fbb02d;"></div><div class="column" style="width:60%"><font color="black">Grocery Product Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #B04CC8;"></div><div class="column" style="width:60%"><font color="black">Small Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #abbafc;"></div><div class="column" style="width:60%"><font color="black">One Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #7485cb;"></div><div class="column" style="width:60%"><font color="black">Two Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #3d509a;"></div><div class="column" style="width:60%"><font color="black">Three Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #061c6a;"></div><div class="column" style="width:60%"><font color="black">Four+ Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #a1a1a1;"></div><div class="column" style="width:60%"><font color="black">No Category Available</font></div></div>
 
     </div>
     <div id="ctrSvgDiv" class="column ctrSvg">
         <svg id="ctrSvg"></svg>
     </div>
-    <div class="column meta">
+    <div class="column meta" style="background-color:#d0f5df; border-radius:5px;">
         <div class="metaName">
             <h3 id="gameName" style="margin:0"></h3>
         </div>
@@ -122,7 +123,7 @@ html,body {
 <script>
 
 var ctrSvg = d3.select("#ctrSvg");
-var width = window.innerWidth * 0.6;
+var width = window.innerWidth * 0.57;
 var height = window.innerHeight - 120;
 ctrSvg.attr("width", width)
     .attr("height", height);
@@ -411,7 +412,7 @@ d3.queue()
 
 // Add X axis
 var heightShift = height * 0.85 - 50;
-var widthShift = width * 0.06 + 50;
+var widthShift = width * 0.06 + 30;
 
 
 
