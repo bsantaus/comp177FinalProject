@@ -10,7 +10,7 @@ html,body {
 
 .column {
     float:left;
-    height:85%;
+    height:90%;
     padding:1%;
 }
 
@@ -29,11 +29,13 @@ html,body {
 }
 
 .ctrSvg {
-    width:55%;
+    width:53%;
+    padding-right:2%;
+    margin-left:1%;
+    margin-right:1%;
 }
 
 .meta {
-    margin-left:2%;
     width:18%;
 }
 
@@ -87,7 +89,10 @@ html,body {
             <option value="n">No</option>
             <option value="y">Yes</option>
         </select><br>
-        <button id="updateViz">Update</button><br>
+        <div style="text-align:center; padding-top:4px;">
+            <button id="updateViz">Update Plot</button>
+        </div>
+        <hr>
         <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #e3655b;"></div><div class="column" style="width:60%"><font color="black">Car Games</font></div></div>
         <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #2ca02c;"></div><div class="column" style="width:60%"><font color="black">Cash Games</font></div></div>
         <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #fbb02d;"></div><div class="column" style="width:60%"><font color="black">Grocery Product Games</font></div></div>
@@ -99,8 +104,8 @@ html,body {
         <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #a1a1a1;"></div><div class="column" style="width:60%"><font color="black">No Category Available</font></div></div>
 
     </div>
-    <div id="ctrSvgDiv" class="column ctrSvg">
-        <svg id="ctrSvg"></svg>
+    <div id="ctrSvgDiv" class="column ctrSvg" style="background-color:#f0f0f0; border-radius:10px;">
+        <svg id="ctrSvg" ></svg>
     </div>
     <div class="column meta" style="background-color:#d0f5df; border-radius:5px;">
         <div class="metaName">
@@ -118,13 +123,14 @@ html,body {
 </div>
 </body>
 
+
 <script src="js/d3.v4.min.js"></script>
 <script src="js/topojson.v1.min.js"></script>
 <script>
 
 var ctrSvg = d3.select("#ctrSvg");
-var width = window.innerWidth * 0.57;
-var height = window.innerHeight - 120;
+var width = window.innerWidth * 0.53;
+var height = window.innerHeight * 0.80;
 ctrSvg.attr("width", width)
     .attr("height", height);
 
@@ -138,228 +144,13 @@ var fgText = "Appearances per Season Active";
 var fcText = "Appearances per Season";
 var wlText = "Win %";
 
-var carColor = "#e3655b";
-var cashColor = "#2ca02c";
-var smallColor = "#B04CC8";
-var groceryColor = "#fbb02d";
-var oneColor = "#abbafc";
-var twoColor = "#7485cb";
-var threeColor = "#3d509a";
-var fourColor = "#061c6a";
-
-var car1Grad = ctrSvg.append("linearGradient")
-				.attr("id", "car1Grad")
-				.attr("cx", "50%")
-				.attr("cy", "50%");
-        
-				
-car1Grad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", carColor);
-car1Grad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", oneColor);
-
-var car2Grad = ctrSvg.append("linearGradient") //background
-				.attr("id", "car2Grad")
-				.attr("cx", "50%")
-				.attr("cy", "50%");
-        				
-car2Grad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", carColor);
-car2Grad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", twoColor);
-
-var car3Grad = ctrSvg.append("linearGradient") //background
-				.attr("id", "car3Grad")
-				.attr("cx", "50%")
-				.attr("cy", "50%");
-        				
-car3Grad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", carColor);
-car3Grad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", threeColor);
-
-var car4Grad = ctrSvg.append("linearGradient") //background
-				.attr("id", "car4Grad")
-				.attr("cx", "50%")
-				.attr("cy", "50%");
-        				
-car4Grad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", carColor);
-car4Grad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", fourColor);
-
-var cargrGrad = ctrSvg.append("linearGradient") //background
-				.attr("id", "cargrGrad")
-				.attr("cx", "50%")
-				.attr("cy", "50%");
-        				
-cargrGrad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", carColor);
-cargrGrad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", groceryColor);
-
-
-var carsmGrad = ctrSvg.append("linearGradient") //background
-				.attr("id", "carsmGrad")
-				.attr("cx", "50%")
-				.attr("cy", "50%");
-        				
-carsmGrad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", carColor);
-carsmGrad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", smallColor);
-
-var cashsmGrad = ctrSvg.append("linearGradient") //background
-				.attr("id", "cashsmGrad")
-				.attr("cx", "50%")
-				.attr("cy", "50%");
-        				
-cashsmGrad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", cashColor);
-cashsmGrad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", smallColor);
-
-var cashgrGrad = ctrSvg.append("linearGradient") //background
-        .attr("id", "cashgrGrad")
-        .attr("cx", "50%")
-        .attr("cy", "50%");
-				
-cashgrGrad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", cashColor);
-cashgrGrad.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", groceryColor);
-
-var car1GradSlot = ctrSvg.append("linearGradient")
-        .attr("id", "car1GradSlot")
-        .attr("cx", "50%")
-        .attr("cy", "50%")
-        .attr("gradientTransform", "rotate(90)");
-        
-				
-car1GradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", carColor);
-car1GradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", oneColor);
-
-var car2GradSlot = ctrSvg.append("linearGradient") //background
-				.attr("id", "car2GradSlot")
-				.attr("cx", "50%")
-				.attr("cy", "50%")
-                .attr("gradientTransform", "rotate(90)");
-
-        				
-car2GradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", carColor);
-car2GradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", twoColor);
-
-var car3GradSlot = ctrSvg.append("linearGradient") //background
-				.attr("id", "car3GradSlot")
-				.attr("cx", "50%")
-				.attr("cy", "50%")
-                .attr("gradientTransform", "rotate(90)");
-
-        				
-car3GradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", carColor);
-car3GradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", threeColor);
-
-var car4GradSlot = ctrSvg.append("linearGradient") //background
-				.attr("id", "car4GradSlot")
-				.attr("cx", "50%")
-				.attr("cy", "50%")
-                .attr("gradientTransform", "rotate(90)");
-
-        				
-car4GradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", carColor);
-car4GradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", fourColor);
-
-var cargrGradSlot = ctrSvg.append("linearGradient") //background
-				.attr("id", "cargrGradSlot")
-				.attr("cx", "50%")
-				.attr("cy", "50%")
-                .attr("gradientTransform", "rotate(90)");
-
-        				
-cargrGradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", carColor);
-cargrGradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", groceryColor);
-
-
-var carsmGradSlot = ctrSvg.append("linearGradient") //background
-				.attr("id", "carsmGradSlot")
-				.attr("cx", "50%")
-				.attr("cy", "50%")
-                .attr("gradientTransform", "rotate(90)");
-
-        				
-carsmGradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", carColor);
-carsmGradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", smallColor);
-
-var cashsmGradSlot = ctrSvg.append("linearGradient") //background
-				.attr("id", "cashsmGradSlot")
-				.attr("cx", "50%")
-				.attr("cy", "50%")
-                .attr("gradientTransform", "rotate(90)");
-
-        				
-cashsmGradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", cashColor);
-cashsmGradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", smallColor);
-
-var cashgrGradSlot = ctrSvg.append("linearGradient") //background
-        .attr("id", "cashgrGradSlot")
-        .attr("cx", "50%")
-        .attr("cy", "50%")
-        .attr("gradientTransform", "rotate(90)");
-
-				
-cashgrGradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", cashColor);
-cashgrGradSlot.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", groceryColor);
-
-
-//Removed rateById to store all county data instead of just 1 column
+</script>
+<script type="text/javascript" src="gradients.js"></script>
+<script type="text/javascript" src="fills.js"></script>
+<script type="text/javascript" src="createPlot.js"></script>
+<script type="text/javascript" src="remakePlot.js"></script>
+<script src="slotBar.js"></script>
+<script>
 var gameData = d3.map();
 var categoryData = d3.map();
 var games = [];
@@ -421,32 +212,6 @@ var y;
 var sy;
 var currentShape = 'circle';
 var tdone = false;
-
-function getFill(cat) {
-    if (!cat) {
-        return "black";
-    }
-    cat = cat.split(",");
-    if (cat.length == 1) 
-        return categoryData.get(cat[0]).color;
-    else {
-        console.log(cat);
-        return "url(#" + categoryData.get(cat[0]).abbr + categoryData.get(cat[1]).abbr + "Grad)";
-    }
-}
-
-function getFillSlot(cat) {
-    if (!cat) {
-        return "black";
-    }
-    cat = cat.split(",");
-    if (cat.length == 1) 
-        return categoryData.get(cat[0]).color;
-    else {
-        console.log(cat);
-        return "url(#" + categoryData.get(cat[0]).abbr + categoryData.get(cat[1]).abbr + "GradSlot)";
-    }
-}
 
 function ready(error, data) {
     let xr = (width * .96 - widthShift) / 2 + widthShift;
@@ -527,426 +292,6 @@ function ready(error, data) {
     }
 }
 
-function populateSlotBar(gd) {
-    d3.select("#metaApp").text("First Appearance: Season " + findFirstApp(gd));
-    d3.select("#metaCat").text("Categories: " + (gd.Category.split(',')[0] ? categoryData.get(gd.Category.split(',')[0]).niceText : "") + (gd.Category.split(',')[1] ? ", " + categoryData.get(gd.Category.split(',')[1]).niceText : ""));
-    d3.select("#metaTotal").text("Total Appearances: " + gd.fTotal);
-    d3.select("#metaFrank").text("Total Appearances Rank: " + gd.fRank);
-    d3.select("#metaActive").text("Seasons Active: " + gd.fActive);
-    d3.select("#metaWPct").text("Overall Win %: " + (gd.wPct ? (gd.wPct * 100).toFixed(2) + "%": "unavailable"));
-
-    if (!gd.s1) { clearSlotBar(); return; }
-
-    slots = [gd.s1, gd.s2, gd.s3, gd.s4, gd.s5, gd.s6, gd.sNA];
-    sx.domain([0, d3.max(slots, function(s) { return parseInt(s); })]);
-    let grad = getFillSlot(gd.Category);
-    
-    for (var i = 1; i < 8; i++) {
-        d3.select("#slot" + i.toString() )
-        .transition()
-        .attr('width', function() { 
-            return sx(parseInt(slots[i-1])); 
-        })
-        .style("fill", grad)
-        .duration(200);
-    }
-}
-
-function findFirstApp(gd) {
-    var seasons = [gd.f1, gd.f2, gd.f3, gd.f4, gd.f5, gd.f6, gd.f7, gd.f8, gd.f9, gd.f10, 
-                    gd.f11, gd.f12, gd.f13, gd.f14, gd.f15, gd.f16, gd.f17, gd.f18, gd.f19, gd.f20, 
-                    gd.f21, gd.f22, gd.f23, gd.f24, gd.f25, gd.f26, gd.f27, gd.f28, gd.f29, gd.f30,
-                    gd.f31, gd.f32, gd.f33, gd.f34, gd.f35, gd.f36, gd.f37, gd.f38, gd.f39, gd.f40, 
-                    gd.f41, gd.f42, gd.f43, gd.f44, gd.f45, gd.f46, gd.f47];
-    for (var i = 0; i < seasons.length; i++) {
-        if (seasons[i] != '-') return (i + 1);
-    }
-}
-
-function clearSlotBar() {
-    for (var i = 1; i < 8; i++) {
-        d3.select("#slot" + i.toString() )
-        .transition()
-        .attr('width', 0)
-        .duration(200);
-    }
-}
-
-function createBar(bars, map) {
-    y.domain([0, d3.max(bars, function(g) { return g.val })])
-    x = d3.scaleBand()
-          .range([widthShift, width*0.96])
-          .padding(0.1)
-          .domain(bars.map((b) => b.name));
-    d3.select("#xax").call(d3.axisBottom(x))
-            .selectAll("text")	
-            .style("text-anchor", "end")
-            .attr("dx", "-.8em")
-            .attr("dy", ".15em")
-            .attr("transform", function(d) {
-                return "rotate(-65)" 
-                });;
-    d3.select("#yax").call(d3.axisLeft(y));
-    d3.select("#xLabel").text("");
-
-    for (var i = 0; i < bars.length; i++) {
-        let game = bars[i].name;
-        ctrSvg.append('rect')
-            .attr("id", game)
-            .style('fill', getFill(gameData.get(game).Category))
-            .attr('x', x(game))
-            .attr('y', heightShift)
-            .attr('width', x.bandwidth())
-            .on("mouseenter", function() {
-                d3.select("#gameName").text(d3.select(this).attr("id"));
-                populateSlotBar(gameData.get(d3.select(this).attr("id")));
-            });
-    }
-    ctrSvg.selectAll('rect')
-      .transition()
-      .attr('y', function() {
-            var game = d3.select(this).attr("id");
-            var elem = bars.find(function(element) { return game == element.name });
-            return y(elem.val);
-        })
-      .attr('height', function() { 
-            var game = d3.select(this).attr("id");
-            var elem = bars.find(function(element) { return game == element.name });
-            return (heightShift) -  y(elem.val); 
-        })
-      .duration(1000);
-
-}
-
-function createScatter(pts, map) {
-    x = d3.scaleLinear()
-    .domain([0, d3.max(pts, function(p) { return parseFloat(map.get(p.name).fTotal) / parseFloat(map.get(p.name).fActive) })])
-    .range([ widthShift, width * 0.96]);
-    
-    y = d3.scaleLinear()
-    .range([ heightShift, height * 0.02])
-    .domain([0, 100]);
-
-    d3.select("#xax").call(d3.axisBottom(x));
-    d3.select("#yax").call(d3.axisLeft(y));
-    d3.select("#xLabel").text(fgText);
-    d3.select("#yLabel").text(wlText);
-
-
-    for (var i = 0; i < pts.length; i++) {
-        let game = pts[i].name;
-        ctrSvg.append("circle")
-            .attr("cx", function() { return x(parseFloat(gameData.get(game).fTotal) / parseFloat(gameData.get(game).fActive)); })
-            .attr("cy", function() { return heightShift; })
-            .attr("id", game)
-            .attr("r", height * width / 75000)
-            .style("fill", getFill(map.get(game).Category))
-            .on("mouseenter", function() {
-                d3.select("#gameName").text(d3.select(this).attr("id"));
-                populateSlotBar(gameData.get(d3.select(this).attr("id")));
-            });
-    }
-    d3.selectAll('circle')
-      .transition()
-      .attr('cy', function() {
-            var game = d3.select(this).attr("id");
-            return y(parseFloat(map.get(game).wPct) * 100);
-        })
-      .duration(1000);
-}
-
-function createBarCat(bars, map) {
-    y.domain([0, d3.max(bars, function(g) { return g.val })])
-    x = d3.scaleBand()
-          .range([widthShift, width*0.96])
-          .padding(0.1)
-          .domain(bars.map((b) => b.name));
-    d3.select("#xax").call(d3.axisBottom(x))
-            .selectAll("text")	
-            .style("text-anchor", "end")
-            .attr("dx", "-.8em")
-            .attr("dy", ".15em")
-            .attr("transform", function(d) {
-                return "rotate(-65)" 
-                });
-    d3.select("#yax").call(d3.axisLeft(y));
-    d3.select("#xLabel").text("");
-
-    for (var i = 0; i < bars.length; i++) {
-        let cat = bars[i].name;
-        ctrSvg.append('rect')
-            .attr("id", cat)
-            .style('fill', categoryData.get(cat).color)
-            .attr('x', x(cat))
-            .attr('y', heightShift)
-            .attr('width', x.bandwidth());
-    }
-    ctrSvg.selectAll('rect')
-      .transition()
-      .attr('y', function() {
-            var cat = d3.select(this).attr("id");
-            var elem = bars.find(function(element) { return cat == element.name });
-            return y(elem.val);
-        })
-      .attr('height', function() { 
-            var cat = d3.select(this).attr("id");
-            var elem = bars.find(function(element) { return cat == element.name });
-            return (heightShift) -  y(elem.val); 
-        })
-      .duration(1000);
-
-}
-
-function createScatterCat(pts, map) {
-    x = d3.scaleLinear()
-    .domain([0, d3.max(pts, function(p) { return p.freq })])
-    .range([ width * 0.06, width * 0.96]);
-    
-    y = d3.scaleLinear()
-    .range([ heightShift, height * 0.02])
-    .domain([0, 100]);
-
-    d3.select("#xax").call(d3.axisBottom(x));
-    d3.select("#yax").call(d3.axisLeft(y));
-    d3.select("#xLabel").text(fcText);
-    d3.select("#yLabel").text(wlText);
-
-    for (var i = 0; i < pts.length; i++) {
-        let cat = pts[i];
-        ctrSvg.append("circle")
-            .attr("cx", function() { return x(cat.freq); })
-            .attr("cy", function() { return heightShift; })
-            .attr("id", cat.name)
-            .attr("r", height * width / 75000)
-            .style("fill", map.get(cat.name).color);
-    }
-    d3.selectAll('circle')
-      .transition()
-      .attr('cy', function() {
-            var cat = d3.select(this).attr("id");
-            return y(pts.find(function(element) { return cat == element.name }).pct);
-        })
-      .duration(1000);
-}
-
-
-function remakeGraphic(item, plot, arr, map, func) {
-    if (item == 'circle') {
-        d3.selectAll(item)
-            .transition()
-            .style("opacity", 0)
-            .attr('cy', heightShift)
-            .duration(1000)
-            .remove()
-            .call(endAll, func, plot, arr, map); 
-    } else {
-        ctrSvg.selectAll(item)
-            .transition()
-            .style("opacity", 0)
-            .attr('y', heightShift)
-            .attr('height', 0)
-            .duration(1000)
-            .remove()
-            .call(endAll, func, plot, arr, map);
-    }
-}
-
-
-function endAll(transition, callback, plot, arr, map) {
-  var n = 0
-  transition.each(() => ++n)
-    .on('end', function () {
-        !--n;
-        if (n == 0) callback(plot, arr, map);
-    });
-}
-
-function nextGraphicGame(plot, arr, map) {
-    if (plot == 'fwl') {
-            createScatter(arr, map);
-            currentShape = 'circle';
-    } else {
-            createBar(arr, map);
-            currentShape = 'rect';
-    }
-}
-
-function nextGraphicCat(plot, arr, map) {
-    if (plot == 'fwl') {
-            createScatterCat(arr, map);
-            currentShape = 'circle';
-    } else {
-            createBarCat(arr, map);
-            currentShape = 'rect';
-    }
-}
-
 document.getElementById("updateViz").onclick = updateViz;
-
-function updateViz() {
-    clearSlotBar();
-    d3.select("#gameName").text("Game Metadata");
-    d3.select("#metaApp").text("First Appearance:");
-    d3.select("#metaCat").text("Categories: ");
-    d3.select("#metaTotal").text("Total Appearances: ");
-    d3.select("#metaFrank").text("Total Appearances Rank: ");
-    d3.select("#metaActive").text("Seasons Active: ");
-    d3.select("#metaWPct").text("Overall Win %: ");
-    var categSel = document.getElementById("Categories");
-    var viewSel = document.getElementById("View");
-    var plotSel = document.getElementById("Plot");
-    var actSel = document.getElementById("Active");
-    currCat = categSel.options[categSel.selectedIndex].value;
-    currView = viewSel.options[viewSel.selectedIndex].value;
-    currPlot = plotSel.options[plotSel.selectedIndex].value;
-    currAct = actSel.options[actSel.selectedIndex].value;
-    var arr = getInitArr(currCat);
-    if (currCat != 'cat' && currAct == 'y') {
-        arr = removeInactive(arr);
-    }
-    if (currCat != 'cat') arr = trimSortArr(arr, currView, currPlot);
-    else arr = modCatArr(arr, currPlot);
-    d3.select("#yLabel").text(currPlot == 'fr' ? (currCat == 'cat' ? fcText : fgText) : wlText);
-    remakeGraphic(currentShape, currPlot, arr, currCat == 'cat' ? categoryData : gameData, currCat == 'cat' ? nextGraphicCat : nextGraphicGame);
-}
-
-function getInitArr(categ) {
-    var arr = [];
-    switch(categ) {
-        case "all":
-            arr = games;
-            break;
-        case "cat":
-            arr = categories.map(c => { return {name:c, wl:categoryData.get(c).wl} });
-            break;
-        default:
-            let c = ""
-            switch (categ) {
-                case "car":
-                    c = "CarGames";
-                    break;
-                case "cash":
-                    c = "CashGames";
-                    break;
-                case "small":
-                    c = "SmallPrizeGames";
-                    break;
-                case "grocery":
-                    c = "GroceryProductGames";
-                    break;
-                case "onep":
-                    c = "OnePrizeGames"
-                    break;
-                case "twop":
-                    c = "TwoPrizeGames"
-                    break;
-                case "threep":
-                    c = "ThreePrizeGames"
-                    break;
-                case "fourp":
-                    c = "FourFivePrizeGames"
-            }    
-            for (var i = 0; i < games.length; i++) {
-                if (gameData.get(games[i]).Category.split(',').includes(c))
-                    arr.push(games[i]);
-            }
-    }
-    return arr;
-}
-
-function removeInactive(arr) {
-    for (var i = 0; i < arr.length; i++) {
-        if (gameData.get(arr[i]).f47 == '-') {
-            arr.splice(i, 1);
-            i--;
-        }
-    }
-    return arr;
-}
-
-function trimSortArr(arr, view, plot) {
-    temp = [];
-    var itemVal;
-    var maxfr = d3.max(arr, function(a) { return parseFloat(gameData.get(a).fTotal) / parseFloat(gameData.get(a).fActive);  });
-
-    for (var i = 0; i < arr.length; i++) {
-        if (plot == 'fwl') {
-            if (gameData.get(arr[i]).wPct != undefined) //rethink rankings here
-                itemVal = parseFloat(gameData.get(arr[i]).fTotal) / parseFloat(gameData.get(arr[i]).fActive) / maxfr + parseFloat(gameData.get(arr[i]).wPct);
-            else
-                continue;
-        } else if (plot == "fr") {
-            itemVal = parseFloat(gameData.get(arr[i]).fTotal) / parseFloat(gameData.get(arr[i]).fActive);
-        } else {
-            if (gameData.get(arr[i]).wPct != undefined) {
-                itemVal = parseFloat(gameData.get(arr[i]).wPct * 100);
-            }
-            else
-                continue;
-        }
-        if (view == 'all' || temp.length < parseInt(view)) {
-            temp.push({name:arr[i], val:itemVal});
-            temp.sort((a,b) => {
-                if (a.val < b.val) return -1;
-                else if (a.val == b.val) return 0;
-                else return 1;
-            });
-        }
-        else if (itemVal) {
-            if (temp[0].val < itemVal) {
-                temp[0] = {name:arr[i], val:itemVal};
-                temp.sort((a,b) => {
-                    if (a.val < b.val) return -1;
-                    else if (a.val == b.val) return 0;
-                    else return 1;
-                });
-            }
-        }
-    }
-    return temp;
-}
-
-function modCatArr(arr, plot) {
-    if (plot == 'fwl') {
-        arr = arr.map(p => { 
-            let catName = p.name;
-            let wl = p.wl.split('-');
-            wl[0] = parseInt(wl[0]);
-            wl[1] = parseInt(wl[1]);
-            let freq = (wl[0] + wl[1]) / 19;
-            let pct = wl[0] / (wl[0] + wl[1]) * 100;
-            return {name:catName, freq:freq, pct:pct};
-        }); 
-    } else if (plot == 'fr') {
-        arr = arr.map(p => { 
-            let catName = p.name;
-            let wl = p.wl.split('-');
-            wl[0] = parseInt(wl[0]);
-            wl[1] = parseInt(wl[1]);
-            let freq = (wl[0] + wl[1]) / 19;
-            return {name:catName, val:freq};
-        });
-        arr = arr.sort((a,b) => {
-            if (a.val < b.val) return -1;
-            else if (a.val == b.val) return 0;
-            else return 1;
-        });
-    } else {
-        arr = arr.map(p => { 
-            let catName = p.name;
-            let wl = p.wl.split('-');
-            wl[0] = parseInt(wl[0]);
-            wl[1] = parseInt(wl[1]);
-            let pct = wl[0] / (wl[0] + wl[1]) * 100;
-            return {name:catName, val:pct};
-        });
-        arr = arr.sort((a,b) => {
-            if (a.val < b.val) return -1;
-            else if (a.val == b.val) return 0;
-            else return 1;
-        })
-    }
-    return arr;
-}
 
 </script>
