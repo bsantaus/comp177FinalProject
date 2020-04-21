@@ -10,7 +10,6 @@ html,body {
 
 .column {
     float:left;
-    height:90%;
     padding:1%;
 }
 
@@ -44,9 +43,9 @@ html,body {
 }
 
 .legendItem {
-    height:4%;
+    height:2%;
     width:100%;
-    padding:14px;
+    padding:8px;
 }
 
 </style>
@@ -56,7 +55,7 @@ html,body {
 <div style="display:flex; flex-flow:column; height:100%;">
 <div style="height:120px;"><h1>The Price Is Right Pricing Games</h1></div><br>
 <div class="row">
-    <div class="column opt" style="background-color:#d0f5df; border-radius:5px;">
+    <div class="column opt" style="height:60%; background-color:#d0f5df; border-radius:5px;">
         <label for="Categories">Category:</label>
         <select id="Categories">
             <option value="all">All Games</option>
@@ -89,23 +88,20 @@ html,body {
             <option value="n">No</option>
             <option value="y">Yes</option>
         </select><br>
-        <div style="text-align:center; padding-top:4px;">
-            <button id="updateViz">Update Plot</button>
-        </div>
         <hr>
-        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #e3655b;"></div><div class="column" style="width:60%"><font color="black">Car Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #2ca02c;"></div><div class="column" style="width:60%"><font color="black">Cash Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #fbb02d;"></div><div class="column" style="width:60%"><font color="black">Grocery Product Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #B04CC8;"></div><div class="column" style="width:60%"><font color="black">Small Prize Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #abbafc;"></div><div class="column" style="width:60%"><font color="black">One Prize Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #7485cb;"></div><div class="column" style="width:60%"><font color="black">Two Prize Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #3d509a;"></div><div class="column" style="width:60%"><font color="black">Three Prize Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #061c6a;"></div><div class="column" style="width:60%"><font color="black">Four+ Prize Games</font></div></div>
-        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:20%; background-color: #a1a1a1;"></div><div class="column" style="width:60%"><font color="black">No Category Available</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:10%; background-color: #e3655b;"></div><div class="column" style="width:60%"><font color="black">Car Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:10%; background-color: #2ca02c;"></div><div class="column" style="width:60%"><font color="black">Cash Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:10%; background-color: #fbb02d;"></div><div class="column" style="width:60%"><font color="black">Grocery Product Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:10%; background-color: #B04CC8;"></div><div class="column" style="width:60%"><font color="black">Small Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:10%; background-color: #abbafc;"></div><div class="column" style="width:60%"><font color="black">One Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:10%; background-color: #7485cb;"></div><div class="column" style="width:60%"><font color="black">Two Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:10%; background-color: #3d509a;"></div><div class="column" style="width:60%"><font color="black">Three Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:10%; background-color: #061c6a;"></div><div class="column" style="width:60%"><font color="black">Four+ Prize Games</font></div></div>
+        <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:10%; background-color: #a1a1a1;"></div><div class="column" style="width:60%"><font color="black">No Category Available</font></div></div>
 
     </div>
-    <div id="ctrSvgDiv" class="column ctrSvg" style="background-color:#f0f0f0; border-radius:10px;">
-        <svg id="ctrSvg" ></svg>
+    <div id="ctrSvgDiv" class="column ctrSvg">
+        <svg id="ctrSvg" style="position:relative; z-index:2"></svg>
     </div>
     <div class="column meta" style="background-color:#d0f5df; border-radius:5px;">
         <div class="metaName">
@@ -159,7 +155,7 @@ var categories = ["CarGames", "CashGames", "GroceryProductGames", "SmallPrizeGam
 var currCat = "all";
 var currView = "all";
 var currPlot = "fwl";
-var currAct = "no";
+var currAct = "n";
 
 d3.select("#gameName").text("Game Metadata");
 
@@ -216,7 +212,6 @@ var tdone = false;
 function ready(error, data) {
     let xr = (width * .96 - widthShift) / 2 + widthShift;
     let yr = (heightShift - (height * 0.02)) / 2 + (height * 0.02);
-    console.log(yr)
 
     x = d3.scaleLinear()
     .domain([0, 40])
@@ -292,6 +287,8 @@ function ready(error, data) {
     }
 }
 
-document.getElementById("updateViz").onclick = updateViz;
-
+document.getElementById("Categories").onchange = updateViz;
+document.getElementById("View").onchange = updateViz;
+document.getElementById("Plot").onchange = updateViz;
+document.getElementById("Active").onchange = updateViz;
 </script>

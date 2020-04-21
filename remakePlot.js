@@ -11,18 +11,21 @@ function updateViz() {
     var viewSel = document.getElementById("View");
     var plotSel = document.getElementById("Plot");
     var actSel = document.getElementById("Active");
-    currCat = categSel.options[categSel.selectedIndex].value;
-    currView = viewSel.options[viewSel.selectedIndex].value;
-    currPlot = plotSel.options[plotSel.selectedIndex].value;
-    currAct = actSel.options[actSel.selectedIndex].value;
-    var arr = getInitArr(currCat);
-    if (currCat != 'cat' && currAct == 'y') {
-        arr = removeInactive(arr);
+    var newCat = categSel.options[categSel.selectedIndex].value;
+    var newView = viewSel.options[viewSel.selectedIndex].value;
+    var newPlot = plotSel.options[plotSel.selectedIndex].value;
+    var newAct = actSel.options[actSel.selectedIndex].value;
+    if (newCat != currCat || newView != currView || newPlot != currPlot || newAct != currAct) {
+        currCat = newCat; currView = newView; currPlot = newPlot; currAct = newAct;
+        var arr = getInitArr(currCat);
+        if (currCat != 'cat' && currAct == 'y') {
+            arr = removeInactive(arr);
+        }
+        if (currCat != 'cat') arr = trimSortArr(arr, currView, currPlot);
+        else arr = modCatArr(arr, currPlot);
+        d3.select("#yLabel").text(currPlot == 'fr' ? (currCat == 'cat' ? fcText : fgText) : wlText);
+        remakeGraphic(currentShape, currPlot, arr, currCat == 'cat' ? categoryData : gameData, currCat == 'cat' ? nextGraphicCat : nextGraphicGame);
     }
-    if (currCat != 'cat') arr = trimSortArr(arr, currView, currPlot);
-    else arr = modCatArr(arr, currPlot);
-    d3.select("#yLabel").text(currPlot == 'fr' ? (currCat == 'cat' ? fcText : fgText) : wlText);
-    remakeGraphic(currentShape, currPlot, arr, currCat == 'cat' ? categoryData : gameData, currCat == 'cat' ? nextGraphicCat : nextGraphicGame);
 }
 
 function remakeGraphic(item, plot, arr, map, func) {
