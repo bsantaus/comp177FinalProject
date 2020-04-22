@@ -19,13 +19,14 @@ function createBar(bars, map) {
         let game = bars[i].name;
         ctrSvg.append('rect')
             .attr("id", game)
-            .style('fill', getFill(gameData.get(game).Category))
+            .style('fill', function() { console.log(game); return getFill(gameData.get(game).Category) } )
             .attr('x', x(game))
             .attr('y', heightShift)
             .attr('width', x.bandwidth())
             .on("mouseenter", function() {
                 d3.select("#gameName").text(d3.select(this).attr("id"));
                 populateSlotBar(gameData.get(d3.select(this).attr("id")));
+                vidplayer.attr('src', "https://www.youtube.com/embed/" + gameData.get(d3.select(this).attr('id')).YTID);
             });
     }
     ctrSvg.selectAll('rect')
@@ -70,6 +71,7 @@ function createScatter(pts, map) {
             .on("mouseenter", function() {
                 d3.select("#gameName").text(d3.select(this).attr("id"));
                 populateSlotBar(gameData.get(d3.select(this).attr("id")));
+                vidplayer.attr('src', "https://www.youtube.com/embed/" + gameData.get(d3.select(this).attr('id')).YTID);
             });
     }
     d3.selectAll('circle')

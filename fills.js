@@ -1,5 +1,5 @@
 function getFill(cat) {
-    if (!cat) {
+    if (cat == "-") {
         return "black";
     }
     cat = cat.split(",");
