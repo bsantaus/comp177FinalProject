@@ -1,6 +1,6 @@
 function populateSlotBar(gd) {
     d3.select("#metaApp").text("First Appearance: Season " + findFirstApp(gd));
-    d3.select("#metaCat").text("Categories: " + (gd.Category.split(',')[0] ? categoryData.get(gd.Category.split(',')[0]).niceText : "") + (gd.Category.split(',')[1] ? ", " + categoryData.get(gd.Category.split(',')[1]).niceText : ""));
+    d3.select("#metaCat").text("Categories: " + (gd.Category.split(',')[0] != '-' ? categoryData.get(gd.Category.split(',')[0]).niceText : "") + (gd.Category.split(',')[1] ? ", " + categoryData.get(gd.Category.split(',')[1]).niceText : ""));
     d3.select("#metaTotal").text("Total Appearances: " + gd.fTotal);
     d3.select("#metaFrank").text("Total Appearances Rank: " + gd.fRank);
     d3.select("#metaActive").text("Seasons Active: " + gd.fActive);
