@@ -9,14 +9,17 @@ function populateSlotBar(gd) {
     if (!gd.s1) { clearSlotBar(); return; }
 
     slots = [gd.s1, gd.s2, gd.s3, gd.s4, gd.s5, gd.s6, gd.sNA];
-    sx.domain([0, d3.max(slots, function(s) { return parseInt(s); })]);
-    let grad = getFillSlot(gd.Category);
+    sy.domain([0, d3.max(slots, function(s) { return parseInt(s); })]);
+    let grad = getFill(gd.Category);
     
     for (var i = 1; i < 8; i++) {
         d3.select("#slot" + i.toString() )
         .transition()
-        .attr('width', function() { 
-            return sx(parseInt(slots[i-1])); 
+        .attr('height', function() { 
+            return (slHeight * 0.9 - 25) - sy(parseInt(slots[i-1])); 
+        })
+        .attr('y', function() { 
+            return sy(parseInt(slots[i-1])); 
         })
         .style("fill", grad)
         .duration(200);
@@ -38,7 +41,8 @@ function clearSlotBar() {
     for (var i = 1; i < 8; i++) {
         d3.select("#slot" + i.toString() )
         .transition()
-        .attr('width', 0)
+        .attr('height', 0)
+        .attr('y', slHeight * 0.9 - 20)
         .duration(200);
     }
 }

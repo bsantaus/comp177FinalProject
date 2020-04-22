@@ -6,6 +6,8 @@
 html,body {
     height:100%;
     width:100%;
+    font-family:"Trebuchet MS", Helvetica, sans-serif;
+
 }
 
 .column {
@@ -24,18 +26,19 @@ html,body {
 }
 
 .opt {
-    width:18%;
+    width:20%;
 }
 
 .ctrSvg {
-    width:53%;
+    width:70%;
     padding-right:2%;
     margin-left:1%;
     margin-right:1%;
 }
 
 .meta {
-    width:18%;
+    width:98%;
+    padding-right:1%
 }
 
 .metaName {
@@ -43,9 +46,14 @@ html,body {
 }
 
 .legendItem {
-    height:2%;
+    height:4%;
     width:100%;
     padding:8px;
+}
+
+.text {
+    width:23%;
+    text-align:left;
 }
 
 </style>
@@ -54,8 +62,8 @@ html,body {
 <body>
 <div style="display:flex; flex-flow:column; height:100%;">
 <div style="height:120px;"><h1>The Price Is Right Pricing Games</h1></div><br>
-<div class="row">
-    <div class="column opt" style="height:60%; background-color:#d0f5df; border-radius:5px;">
+<div class="row" style="height:58%">
+    <div class="column opt" style="height:90%; background-color:#d0f5df; border-radius:5px;">
         <label for="Categories">Category:</label>
         <select id="Categories">
             <option value="all">All Games</option>
@@ -103,14 +111,18 @@ html,body {
     <div id="ctrSvgDiv" class="column ctrSvg">
         <svg id="ctrSvg" style="position:relative; z-index:2"></svg>
     </div>
-    <div class="column meta" style="background-color:#d0f5df; border-radius:5px;">
-        <div class="metaName">
-            <h3 id="gameName" style="margin:0"></h3>
-        </div>
+</div>
+<div class="row meta" style="height:25%; background-color:#d0f5df; border-radius:5px;">
+    <div class="metaName column">
+        <h3 id="gameName" style="margin:0"></h3>
         <svg id="slotSvg"></svg><br>
+    </div>
+    <div class="column text">
         <p id="metaApp">First Appearance:</p>
         <p id="metaCat">Categories:</p>
         <p id="metaTotal">Total Appearances:</p>
+    </div>
+    <div class="column text">
         <p id="metaFrank">Total Appearances Rank:</p>
         <p id="metaActive">Seasons Active:</p>
         <p id="metaWPct">Overall Win %:</p>
@@ -125,14 +137,14 @@ html,body {
 <script>
 
 var ctrSvg = d3.select("#ctrSvg");
-var width = window.innerWidth * 0.53;
-var height = window.innerHeight * 0.80;
+var width = window.innerWidth * 0.70;
+var height = window.innerHeight * 0.54;
 ctrSvg.attr("width", width)
     .attr("height", height);
 
 var slotSvg = d3.select("#slotSvg");
-var slWidth = window.innerWidth * .18;
-var slHeight = window.innerHeight * 0.4;
+var slWidth = window.innerWidth * .25;
+var slHeight = window.innerHeight * 0.2;
 slotSvg.attr("width", slWidth)
     .attr("height", slHeight);
 
@@ -255,24 +267,24 @@ function ready(error, data) {
         }
     }
 
-    sy = d3.scaleBand()
-            .range([slHeight * 0.98, slHeight * 0.02])
-            .domain(['?', '6', '5', '4', '3', '2', '1'])
+    sx = d3.scaleBand()
+            .range([slWidth * 0.02, slWidth * 0.98])
+            .domain(['1', '2', '3', '4', '5', '6', '?'])
             .padding(0.1);
 
-    sx = d3.scaleLinear()
-           .range([slWidth * 0.1 + 30, slWidth * .6]);
+    sy = d3.scaleLinear()
+           .range([slHeight * 0.9 - 25, slHeight * 0.25]);
     
-    syr = ((slHeight * .98) - (slHeight * 0.02)) / 2 + slHeight * 0.02;
+    sxr = ((slWidth * .98) - (slWidth * 0.02)) / 2 + slHeight * 0.9;
 
 
     slotSvg.append("g")
-        .attr("id", "yax")
-        .attr("transform", "translate(" + (slWidth * 0.1 + 30) + ",0)")
-        .call(d3.axisLeft(sy));
+        .attr("id", "xax")
+        .attr("transform", "translate(0," + (slHeight * 0.9 - 25) + ")")
+        .call(d3.axisBottom(sx));
     slotSvg.append("text")
-        .attr("id", "syLabel")
-        .attr("transform", "translate(" + (slWidth * 0.1) + " ," + syr + "), rotate(-90)")
+        .attr("id", "sxLabel")
+        .attr("transform", "translate(" + slWidth / 2 + " ," + (slHeight * 0.95) + ")")
         .style("text-anchor", "middle")
         .text("Appearances per Game Slot in Show");
 
@@ -280,10 +292,14 @@ function ready(error, data) {
         slotSvg.append('rect')
             .attr("id", "slot" + i)
             .style('fill', 'black')
-            .attr('x', slWidth * 0.1 + 30)
-            .attr('y', sy(i == 7 ? "?" : i.toString()))
-            .attr('height', sy.bandwidth())
-            .attr("width", 0);
+            .attr('y', slHeight * 0.9 - 25)
+            .attr('x', sx(i == 7 ? "?" : i.toString()))
+            .attr('height', 0)
+            .attr("width", sx.bandwidth())
+            .append('text')
+            .attr('x', sx.bandwidth() / 2)
+            .attr('y', 20)
+            .text('69');
     }
 }
 
