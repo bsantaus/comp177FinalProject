@@ -127,6 +127,12 @@ html,body {
         <p id="metaActive">Seasons Active:</p>
         <p id="metaWPct">Overall Win %:</p>
     </div>
+    <div class="column">
+        <h3 style="margin-top:0">Example:</h3>
+        <iframe id="vid"
+            src="">
+        </iframe>
+    </div>
 </div>
 </div>
 </body>
@@ -151,6 +157,10 @@ slotSvg.attr("width", slWidth)
 var fgText = "Appearances per Season Active";
 var fcText = "Appearances per Season";
 var wlText = "Win %";
+
+var vidplayer = d3.select("#vid");
+vidplayer.attr('width', window.innerWidth * 0.19)
+        .attr('height', window.innerHeight * 0.17);
 
 </script>
 <script type="text/javascript" src="gradients.js"></script>
@@ -180,7 +190,7 @@ d3.queue()
             f25:d.f25, f26:d.f26, f27:d.f27, f28:d.f28, f29:d.f29, f30:d.f30,
             f31:d.f31, f32:d.f2, f33:d.f33, f34:d.f34, f35:d.f35, f36:d.f36,
             f37:d.f37, f38:d.f38, f39:d.f39, f40:d.f40, f41:d.f41, f42:d.f42,
-            f43:d.f43, f44:d.f44, f45:d.f45, f46:d.f46, f47:d.f47, fTotal:d.fTotal, fRank:d.fRank, fActive:d.fActive, Category:d.Category});
+            f43:d.f43, f44:d.f44, f45:d.f45, f46:d.f46, f47:d.f47, fTotal:d.fTotal, fRank:d.fRank, fActive:d.fActive, Category:d.Category, YTID:d.YTID});
         games.push(d.PricingGame);
     })
     .defer(d3.tsv, "winLoss.tsv"+'?' + Math.floor(Math.random() * 1000), function (d) {
@@ -263,6 +273,7 @@ function ready(error, data) {
                 .on("mouseenter", function() {
                     d3.select("#gameName").text(d3.select(this).attr("id"));
                     populateSlotBar(gameData.get(d3.select(this).attr("id")));
+                    vidplayer.attr('src', "https://www.youtube.com/embed/" + gameData.get(d3.select(this).attr('id')).YTID)
                 });
         }
     }
@@ -289,17 +300,23 @@ function ready(error, data) {
         .text("Appearances per Game Slot in Show");
 
     for (var i = 1; i < 8; i++) {
-        slotSvg.append('rect')
+        slotSvg.append('g')
+            .attr('id', "gslot" + i)
+            .append('rect')
             .attr("id", "slot" + i)
             .style('fill', 'black')
             .attr('y', slHeight * 0.9 - 25)
             .attr('x', sx(i == 7 ? "?" : i.toString()))
             .attr('height', 0)
             .attr("width", sx.bandwidth())
-            .append('text')
-            .attr('x', sx.bandwidth() / 2)
-            .attr('y', 20)
-            .text('69');
+            
+        d3.select("#gslot" + i).append('text')
+            .attr('x', sx(i == 7 ? "?" : i.toString()) + (sx.bandwidth() / 2))
+            .attr('y', slHeight * 0.9 - 40)
+            .attr('text-anchor', 'middle')
+            .text('-')
+            .style('opacity', '0')
+            .attr("fill", "black");
     }
 }
 

@@ -14,6 +14,7 @@ function populateSlotBar(gd) {
     
     for (var i = 1; i < 8; i++) {
         d3.select("#slot" + i.toString() )
+        .style("fill", grad)
         .transition()
         .attr('height', function() { 
             return (slHeight * 0.9 - 25) - sy(parseInt(slots[i-1])); 
@@ -21,7 +22,14 @@ function populateSlotBar(gd) {
         .attr('y', function() { 
             return sy(parseInt(slots[i-1])); 
         })
-        .style("fill", grad)
+        .duration(200);
+
+        d3.select("#gslot" + i.toString())
+        .select('text')
+        .text(slots[i-1])
+        .style('opacity', '1')
+        .transition()
+        .attr('y', sy(parseInt(slots[i-1])) - 15)
         .duration(200);
     }
 }
@@ -42,7 +50,14 @@ function clearSlotBar() {
         d3.select("#slot" + i.toString() )
         .transition()
         .attr('height', 0)
-        .attr('y', slHeight * 0.9 - 20)
+        .attr('y', slHeight * 0.9 - 25)
+        .duration(200);
+        d3.select("#gslot" + i.toString())
+        .select('text')
+        .text('')
+        .style('opacity', '0')
+        .transition()
+        .attr('y', slHeight * 0.9 - 60)
         .duration(200);
     }
 }
