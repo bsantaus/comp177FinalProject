@@ -23,10 +23,32 @@ function createBar(bars, map) {
             .attr('x', x(game))
             .attr('y', heightShift)
             .attr('width', x.bandwidth())
+            .style("opacity", function() {
+                if (!clicked || (bars.map(b => b.name).includes(clicked) && game == clicked)) {
+                    return 1;
+                } else {
+                    return .5;
+                }
+            })
             .on("mouseenter", function() {
-                d3.select("#gameName").text(d3.select(this).attr("id"));
-                populateSlotBar(gameData.get(d3.select(this).attr("id")));
-                vidplayer.attr('src', "https://www.youtube.com/embed/" + gameData.get(d3.select(this).attr('id')).YTID);
+                if (!clicked) editMeta(game);
+            })
+            .on("click", function() {
+                if (clicked != game) {
+                    d3.selectAll("rect")
+                        .transition()
+                        .style("opacity", function() { return (d3.select(this).attr("id") == game ? 1 : .5)})
+                        .duration(100);
+                    clicked = game;
+                    editMeta(game);
+                } else {
+                    d3.selectAll("rect")
+                        .transition()
+                        .style("opacity", 1)
+                        .duration(100);
+                    clicked = undefined;
+                    editMeta(game);
+                }
             });
     }
     ctrSvg.selectAll('rect')
@@ -68,10 +90,32 @@ function createScatter(pts, map) {
             .attr("id", game)
             .attr("r", height * width / 75000)
             .style("fill", getFill(map.get(game).Category))
+            .style("opacity", function() {
+                if (!clicked || (pts.map(b => b.name).includes(clicked) && game == clicked)) {
+                    return 1;
+                } else {
+                    return .5;
+                }
+            })
             .on("mouseenter", function() {
-                d3.select("#gameName").text(d3.select(this).attr("id"));
-                populateSlotBar(gameData.get(d3.select(this).attr("id")));
-                vidplayer.attr('src', "https://www.youtube.com/embed/" + gameData.get(d3.select(this).attr('id')).YTID);
+                if (!clicked) editMeta(game);
+            })
+            .on("click", function() {
+                if (clicked != game) {
+                    d3.selectAll("circle")
+                        .transition()
+                        .style("opacity", function() { return (d3.select(this).attr("id") == game ? 1 : .5)})
+                        .duration(100);
+                    clicked = game;
+                    editMeta(game);
+                } else {
+                    d3.selectAll("circle")
+                        .transition()
+                        .style("opacity", 1)
+                        .duration(100);
+                    clicked = undefined;
+                    editMeta(game);
+                }
             });
     }
     d3.selectAll('circle')

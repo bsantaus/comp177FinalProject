@@ -1,12 +1,4 @@
 function updateViz() {
-    clearSlotBar();
-    d3.select("#gameName").text("Game Metadata");
-    d3.select("#metaApp").text("First Appearance:");
-    d3.select("#metaCat").text("Categories: ");
-    d3.select("#metaTotal").text("Total Appearances: ");
-    d3.select("#metaFrank").text("Total Appearances Rank: ");
-    d3.select("#metaActive").text("Seasons Active: ");
-    d3.select("#metaWPct").text("Overall Win %: ");
     var categSel = document.getElementById("Categories");
     var viewSel = document.getElementById("View");
     var plotSel = document.getElementById("Plot");
@@ -25,6 +17,18 @@ function updateViz() {
         else arr = modCatArr(arr, currPlot);
         d3.select("#yLabel").text(currPlot == 'fr' ? (currCat == 'cat' ? fcText : fgText) : wlText);
         remakeGraphic(currentShape, currPlot, arr, currCat == 'cat' ? categoryData : gameData, currCat == 'cat' ? nextGraphicCat : nextGraphicGame);
+
+        if (!clicked || currCat == 'cat' || !arr.map(a => a.name).includes(clicked)) {
+            clicked = undefined;
+            clearSlotBar();
+            d3.select("#gameName").text("Game Metadata");
+            d3.select("#metaApp").text("First Appearance:");
+            d3.select("#metaCat").text("Categories: ");
+            d3.select("#metaTotal").text("Total Appearances: ");
+            d3.select("#metaFrank").text("Total Appearances Rank: ");
+            d3.select("#metaActive").text("Seasons Active: ");
+            d3.select("#metaWPct").text("Overall Win %: ");
+        }
     }
 }
 
