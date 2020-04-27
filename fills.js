@@ -1,6 +1,6 @@
 function getFill(cat) {
     if (cat == "-") {
-        return "black";
+        return "#a1a1a1";
     }
     cat = cat.split(",");
     if (cat.length == 1) 

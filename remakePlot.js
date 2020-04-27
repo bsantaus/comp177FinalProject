@@ -9,8 +9,10 @@ function updateViz() {
     var newAct = actSel.options[actSel.selectedIndex].value;
     if (newCat != currCat || newView != currView || newPlot != currPlot || newAct != currAct) {
         currCat = newCat; currView = newView; currPlot = newPlot; currAct = newAct;
+        console.log(currAct);
         var arr = getInitArr(currCat);
         if (currCat != 'cat' && currAct == 'y') {
+            console.log('huh')
             arr = removeInactive(arr);
         }
         if (currCat != 'cat') arr = trimSortArr(arr, currView, currPlot);
@@ -87,7 +89,7 @@ function getInitArr(categ) {
     var arr = [];
     switch(categ) {
         case "all":
-            arr = games;
+            arr = games.slice();
             break;
         case "cat":
             arr = categories.map(c => { return {name:c, wl:categoryData.get(c).wl} });
@@ -128,6 +130,7 @@ function getInitArr(categ) {
 }
 
 function removeInactive(arr) {
+    console.log('hey brooo')
     for (var i = 0; i < arr.length; i++) {
         if (gameData.get(arr[i]).f47 == '-') {
             arr.splice(i, 1);
