@@ -93,8 +93,8 @@ img {
 
 <!--Category: S29-47, Frequency: S1-47, Slots: S16-47, W/L: S29-47-->
 <body>
-<div style="display:flex; flex-flow:column; height:100%;">
-<div id="title" class="row" style="height:100%; margin:0px; padding:0px; background-color:#d0f5df">
+<div style="display:flex; flex-flow:column; height:100%; width:98%; margin:0px;">
+<div id="title" class="row" style="height:97%; width:100%; margin:0px; padding:0px; border: 2px solid black; border-radius: 5px; background-color:#d0f5df">
     <div class='column' style="height:100%; width:50%; text-align:center; padding: 15vw 0px">
         <h1>The Price Is Right Pricing Games</h1>
         <p>Frequency and Win-Loss Percentage for every game ever played.</p>
@@ -110,7 +110,7 @@ img {
     </div>
 </div>
 <hr>
-<div class="row" style="height:66%">
+<div class="row" style="height:69%">
     <div class="column opt" style="height:90%; background-color:#d0f5df; border-radius:5px;">
         <label for="Categories">Category:</label>
         <select id="Categories">
@@ -160,23 +160,23 @@ img {
         <svg id="ctrSvg" style="position:relative; z-index:2"></svg>
     </div>
 </div>
-<div id="viz" class="row meta" style="height:30%; background-color:#d0f5df; border-radius:5px;">
+<div class="row meta" style="height:30%; width:99%; background-color:#d0f5df; border-radius:5px; margin-bottom:10px;">
     <div class="metaName column">
         <h3 id="gameName" style="margin:0"></h3>
         <svg id="slotSvg"></svg><br>
     </div>
-    <div class="column text" style="width:28%;">
+    <div class="column text" style="font-size:1.1vw; width:26%;">
         <p id="metaApp">First Appearance:</p>
         <p id="metaCat">Categories:</p>
         <p id="metaTotal">Total Appearances:</p>
     </div>
-    <div class="column text" style="width:16%">
+    <div class="column text" style="font-size:1.1vw; width:15%">
         <p id="metaFrank">Total Appearances Rank:</p>
         <p id="metaActive">Seasons Active:</p>
         <p id="metaWPct">Overall Win %:</p>
     </div>
-    <div class="column">
-        <iframe id="vid"
+    <div class="column" style="width:27%; height:85%;">
+        <iframe id="vid" width="100%" height="100%"
             src="">
         </iframe>
     </div>
@@ -197,7 +197,7 @@ $(".leggo").click(function() {
 });
 
 var ctrSvg = d3.select("#ctrSvg");
-var width = window.innerWidth * 0.70;
+var width = window.innerWidth * 0.67;
 var height = window.innerHeight * 0.66;
 ctrSvg.attr("width", width)
     .attr("height", height);
@@ -213,10 +213,10 @@ var fcText = "Appearances per Season";
 var wlText = "Win %";
 
 var vidplayer = d3.select("#vid");
-var vidWidth = window.innerWidth * 0.25;
-var vidHeight = window.innerHeight * 0.25;
-vidplayer.attr('width', vidWidth)
-        .attr('height', vidHeight);
+// var vidWidth = window.innerWidth * 0.25;
+// var vidHeight = window.innerHeight * 0.25;
+// vidplayer.attr('width', vidWidth)
+//         .attr('height', vidHeight);
 
 var barker = d3.select("#barker");
 var carey = d3.select("#carey");
