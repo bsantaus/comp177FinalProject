@@ -60,4 +60,5 @@ function clearSlotBar() {
         .attr('y', slHeight * 0.9 - 60)
         .duration(200);
     }
+    vidplayer.attr("src", "https://www.youtube.com/embed/4rEQvncx-FI");
 }
