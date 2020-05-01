@@ -23,10 +23,8 @@ function updateViz() {
     //only run the rest if the viz needs to change
     if (newCat != currCat || newView != currView || newPlot != currPlot || newAct != currAct) {
         currCat = newCat; currView = newView; currPlot = newPlot; currAct = newAct;
-        console.log(currAct);
         var arr = getInitArr(currCat); //get the initial set of games/categories
         if (currCat != 'cat' && currAct == 'y') { //if not grouped by category, remove inactive games if necessary
-            console.log('huh')
             arr = removeInactive(arr);
         }
         if (currCat != 'cat') arr = trimSortArr(arr, currView, currPlot); //if less than all the games and not grouped by category, get the top ones and sort them in ascending order
