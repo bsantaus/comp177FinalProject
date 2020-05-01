@@ -1,3 +1,23 @@
+/* ATTENTION:
+ * There is nothing interesting in this file.
+ * Turn back now.
+ * It's a couple hundred lines of me declaring/appending gradients to the svg.
+ * That's all you'd learn from this file.
+ * 
+ * Sincerely,
+ * Management
+*/
+
+/* The Price is Right Visualization
+ * Comp177 Final Project
+ * Completed May 1 2020
+ * Created by Ben Santaus
+ * 
+ * gradients.js
+ * Contains 220 lines of declaring gradients so that they wouldn't pollute any other files.
+*/
+
+
 var carColor = "#e3655b";
 var cashColor = "#2ca02c";
 var smallColor = "#B04CC8";

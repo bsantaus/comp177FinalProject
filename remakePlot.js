@@ -1,3 +1,15 @@
+/* The Price is Right Visualization
+ * Comp177 Final Project
+ * Completed May 1 2020
+ * Created by Ben Santaus
+ * 
+ * remakePlot.js
+ * Contains functions used to clear the current plot and remake it
+ * according to the options selected by the user.
+*/
+
+
+//Bound to each of the dropdowns and runs whenever the value changes in any.
 function updateViz() {
     var categSel = document.getElementById("Categories");
     var viewSel = document.getElementById("View");
@@ -7,19 +19,22 @@ function updateViz() {
     var newView = viewSel.options[viewSel.selectedIndex].value;
     var newPlot = plotSel.options[plotSel.selectedIndex].value;
     var newAct = actSel.options[actSel.selectedIndex].value;
+
+    //only run the rest if the viz needs to change
     if (newCat != currCat || newView != currView || newPlot != currPlot || newAct != currAct) {
         currCat = newCat; currView = newView; currPlot = newPlot; currAct = newAct;
         console.log(currAct);
-        var arr = getInitArr(currCat);
-        if (currCat != 'cat' && currAct == 'y') {
+        var arr = getInitArr(currCat); //get the initial set of games/categories
+        if (currCat != 'cat' && currAct == 'y') { //if not grouped by category, remove inactive games if necessary
             console.log('huh')
             arr = removeInactive(arr);
         }
-        if (currCat != 'cat') arr = trimSortArr(arr, currView, currPlot);
-        else arr = modCatArr(arr, currPlot);
-        d3.select("#yLabel").text(currPlot == 'fr' ? (currCat == 'cat' ? fcText : fgText) : wlText);
-        remakeGraphic(currentShape, currPlot, arr, currCat == 'cat' ? categoryData : gameData, currCat == 'cat' ? nextGraphicCat : nextGraphicGame);
+        if (currCat != 'cat') arr = trimSortArr(arr, currView, currPlot); //if less than all the games and not grouped by category, get the top ones and sort them in ascending order
+        else arr = modCatArr(arr, currPlot); //if grouped by category, sort.
+        d3.select("#yLabel").text(currPlot == 'fr' ? (currCat == 'cat' ? fcText : fgText) : wlText); //set the appropriate y axis label.
+        remakeGraphic(currentShape, currPlot, arr, currCat == 'cat' ? categoryData : gameData, currCat == 'cat' ? nextGraphicCat : nextGraphicGame); //use array to change viz.
 
+        //if there's a clicked element, don't clear metadata
         if (!clicked || currCat == 'cat' || !arr.map(a => a.name).includes(clicked)) {
             clicked = undefined;
             clearSlotBar();
@@ -34,6 +49,8 @@ function updateViz() {
     }
 }
 
+//remove all elements currently on the graph, then move on once theyre all removed.
+//func is either one to create next category graphic or next game graphic
 function remakeGraphic(item, plot, arr, map, func) {
     if (item == 'circle') {
         d3.selectAll(item)
@@ -56,6 +73,7 @@ function remakeGraphic(item, plot, arr, map, func) {
 }
 
 
+//count how many things are being removed, once the last one is done, call the callback function
 function endAll(transition, callback, plot, arr, map) {
   var n = 0
   transition.each(() => ++n)
@@ -65,6 +83,7 @@ function endAll(transition, callback, plot, arr, map) {
     });
 }
 
+//route to the appropriate chart to make
 function nextGraphicGame(plot, arr, map) {
     if (plot == 'fwl') {
             createScatter(arr, map);
@@ -85,11 +104,12 @@ function nextGraphicCat(plot, arr, map) {
     }
 }
 
+//get teh array of elements in a category
 function getInitArr(categ) {
     var arr = [];
     switch(categ) {
         case "all":
-            arr = games.slice();
+            arr = games.slice(); //need to do this or it's a reference to games. Bad.
             break;
         case "cat":
             arr = categories.map(c => { return {name:c, wl:categoryData.get(c).wl} });
@@ -121,7 +141,7 @@ function getInitArr(categ) {
                 case "fourp":
                     c = "FourFivePrizeGames"
             }    
-            for (var i = 0; i < games.length; i++) {
+            for (var i = 0; i < games.length; i++) { //get all the games of a certain category
                 if (gameData.get(games[i]).Category.split(',').includes(c))
                     arr.push(games[i]);
             }
@@ -129,8 +149,7 @@ function getInitArr(categ) {
     return arr;
 }
 
-function removeInactive(arr) {
-    console.log('hey brooo')
+function removeInactive(arr) { //get those inactive games out of the array
     for (var i = 0; i < arr.length; i++) {
         if (gameData.get(arr[i]).f47 == '-') {
             arr.splice(i, 1);
@@ -147,19 +166,23 @@ function trimSortArr(arr, view, plot) {
 
     for (var i = 0; i < arr.length; i++) {
         if (plot == 'fwl') {
-            if (gameData.get(arr[i]).wPct != undefined) //rethink rankings here
+            //determine value that will be used to rank and sort games
+            //if there's no win percentage, exclude this one
+            if (gameData.get(arr[i]).wPct != undefined) 
                 itemVal = parseFloat(gameData.get(arr[i]).fTotal) / parseFloat(gameData.get(arr[i]).fActive) / maxfr + parseFloat(gameData.get(arr[i]).wPct);
             else
                 continue;
         } else if (plot == "fr") {
             itemVal = parseFloat(gameData.get(arr[i]).fTotal) / parseFloat(gameData.get(arr[i]).fActive);
         } else {
+            //no win percentage - exclude this one
             if (gameData.get(arr[i]).wPct != undefined) {
                 itemVal = parseFloat(gameData.get(arr[i]).wPct * 100);
             }
             else
                 continue;
         }
+        //push items onto list and sort
         if (view == 'all' || temp.length < parseInt(view)) {
             temp.push({name:arr[i], val:itemVal});
             temp.sort((a,b) => {
@@ -169,6 +192,8 @@ function trimSortArr(arr, view, plot) {
             });
         }
         else if (itemVal) {
+            //if we're at capacity, check if there's one to bump
+            //if so, add and sort list
             if (temp[0].val < itemVal) {
                 temp[0] = {name:arr[i], val:itemVal};
                 temp.sort((a,b) => {
@@ -183,6 +208,7 @@ function trimSortArr(arr, view, plot) {
 }
 
 function modCatArr(arr, plot) {
+    //add elements to list based on what the plot is going to be
     if (plot == 'fwl') {
         arr = arr.map(p => { 
             let catName = p.name;

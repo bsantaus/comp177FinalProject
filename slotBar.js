@@ -1,4 +1,15 @@
+/* The Price is Right Visualization
+ * Comp177 Final Project
+ * Completed May 1 2020
+ * Created by Ben Santaus
+ * 
+ * slotBar.js
+ * Contains functions that manipulate the metadata and the secondary viz
+ * displaying game slot information.
+*/
+
 function populateSlotBar(gd) {
+    //edit the metadata text
     d3.select("#metaApp").text("First Appearance: Season " + findFirstApp(gd));
     d3.select("#metaCat").text("Categories: " + (gd.Category.split(',')[0] != '-' ? categoryData.get(gd.Category.split(',')[0]).niceText : "") + (gd.Category.split(',')[1] ? ", " + categoryData.get(gd.Category.split(',')[1]).niceText : ""));
     d3.select("#metaTotal").text("Total Appearances: " + gd.fTotal);
@@ -6,11 +17,13 @@ function populateSlotBar(gd) {
     d3.select("#metaActive").text("Seasons Active: " + gd.fActive);
     d3.select("#metaWPct").text("Overall Win %: " + (gd.wPct ? (gd.wPct * 100).toFixed(2) + "%": "unavailable"));
 
+    //if there's not any data, don't try to fill with data.
     if (!gd.s1) { clearSlotBar(); return; }
 
+    //set domain of y - scale will be different for each game.
     slots = [gd.s1, gd.s2, gd.s3, gd.s4, gd.s5, gd.s6, gd.sNA];
     sy.domain([0, d3.max(slots, function(s) { return parseInt(s); })]);
-    let grad = getFill(gd.Category);
+    let grad = getFill(gd.Category); //all the same color(s)
     
     for (var i = 1; i < 8; i++) {
         d3.select("#slot" + i.toString() )
@@ -24,7 +37,7 @@ function populateSlotBar(gd) {
         })
         .duration(200);
 
-        d3.select("#gslot" + i.toString())
+        d3.select("#gslot" + i.toString()) //more pretty transitions
         .select('text')
         .text(slots[i-1])
         .style('opacity', '1')
@@ -34,6 +47,7 @@ function populateSlotBar(gd) {
     }
 }
 
+//This is... something. Something pretty gross. Skip.
 function findFirstApp(gd) {
     var seasons = [gd.f1, gd.f2, gd.f3, gd.f4, gd.f5, gd.f6, gd.f7, gd.f8, gd.f9, gd.f10, 
                     gd.f11, gd.f12, gd.f13, gd.f14, gd.f15, gd.f16, gd.f17, gd.f18, gd.f19, gd.f20, 
@@ -45,6 +59,7 @@ function findFirstApp(gd) {
     }
 }
 
+//Reset the bars back to zero height.
 function clearSlotBar() {
     for (var i = 1; i < 8; i++) {
         d3.select("#slot" + i.toString() )
@@ -60,5 +75,7 @@ function clearSlotBar() {
         .attr('y', slHeight * 0.9 - 60)
         .duration(200);
     }
-    vidplayer.attr("src", "https://www.youtube.com/embed/4rEQvncx-FI");
+
+    //reset the video to my nice tutorial one :)
+    vidplayer.attr("src", "https://www.youtube.com/embed/p4iHtw1NUsk");
 }

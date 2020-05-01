@@ -1,7 +1,19 @@
+<!-- The Price is Right Visualization
+ * Comp177 Final Project
+ * Completed May 1 2020
+ * Created by Ben Santaus
+ * 
+ * tpirViz.html
+ * Contains HTML/CSS to set up the page and Javascript code
+ * performing basic operations on the page
+-->
+
 
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+
+/* Various Classes for Aesthetics */
 
 html,body {
     height:100%;
@@ -68,6 +80,8 @@ img {
     overflow:hidden;
 }
 
+/* For Button on Title Pane */
+
 .leggo {
   background-color: #d0f5df;
   border: none;
@@ -91,9 +105,12 @@ img {
 
 </style>
 
-<!--Category: S29-47, Frequency: S1-47, Slots: S16-47, W/L: S29-47-->
+<!--Lots of HTML for various elements-->
 <body>
 <div style="display:flex; flex-flow:column; height:100%; width:98%; margin:0px;">
+
+
+<!--Title Pane - contains title, subtitle, and images of Bob Barker and Drew Carey-->
 <div id="title" class="row" style="height:97%; width:100%; margin:0px; padding:0px; border: 2px solid black; border-radius: 5px; background-color:#d0f5df">
     <div class='column' style="height:100%; width:50%; text-align:center; padding: 15vw 0px">
         <h1>The Price Is Right Pricing Games</h1>
@@ -111,6 +128,8 @@ img {
     </div>
 </div>
 <hr>
+
+<!--Main Content Area Containing Options, Legend, and Plot-->
 <div class="row" style="height:69%">
     <div class="column opt" style="height:90%; background-color:#d0f5df; border-radius:5px;">
         <label for="Categories">Category:</label>
@@ -146,6 +165,7 @@ img {
             <option value="y">Yes</option>
         </select><br>
         <hr>
+        <!--Lots of CSS nonsense I never got around to moving.-->
         <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:10%; background-color: #e3655b;"></div><div class="column" style="width:70%"><font color="black">Car Games</font></div></div><br>
         <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:10%; background-color: #2ca02c;"></div><div class="column" style="width:70%"><font color="black">Cash Games</font></div></div><br>
         <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:10%; background-color: #fbb02d;"></div><div class="column" style="width:70%"><font color="black">Grocery Product Games</font></div></div><br>
@@ -157,14 +177,19 @@ img {
         <div class="legendItem row"><div class="column" style="border-radius:5px; margin-right:10px; height:100%; width:10%; background-color: #a1a1a1;"></div><div class="column" style="width:70%"><font color="black">No Category Available</font></div></div>
 
     </div>
+
+    <!--Actually the Viz!-->
     <div id="ctrSvgDiv" class="column ctrSvg">
         <svg id="ctrSvg" style="position:relative; z-index:2"></svg>
     </div>
+    <!--That's it.-->
 </div>
+
+<!--Metadata Linked to Viz Bottom Pane-->
 <div class="row meta" style="height:30%; width:99%; background-color:#d0f5df; border-radius:5px; margin-bottom:10px;">
     <div class="metaName column">
         <h3 id="gameName" style="margin:0"></h3>
-        <svg id="slotSvg"></svg><br>
+        <svg id="slotSvg"></svg><br> <!--Secondary, linked part of Viz-->
     </div>
     <div class="column text" style="font-size:1.1vw; width:26%;">
         <p id="metaApp">First Appearance:</p>
@@ -178,7 +203,7 @@ img {
     </div>
     <div class="column" style="width:27%; height:85%;">
         <iframe id="vid" width="100%" height="100%"
-            src="https://www.youtube.com/embed/4rEQvncx-FI">
+            src="https://www.youtube.com/embed/p4iHtw1NUsk"> <!--Link to my video, which comes up whenever bottom pane is empty-->
         </iframe>
     </div>
 </div>
@@ -191,12 +216,16 @@ img {
 <script src="js/jquery-3.1.0.min.js"></script>
 <script>
 
+//Button on title pane scrolls down hopefully far enough to content
 $(".leggo").click(function() {
     $('html,body').animate({
         scrollTop: "1200px"},
         'slow');
 });
 
+
+//Get references to both scvgs in the page, main one and game slot one
+//Dynamically set height based on initial size of page.
 var ctrSvg = d3.select("#ctrSvg");
 var width = window.innerWidth * 0.67;
 var height = window.innerHeight * 0.66;
@@ -209,16 +238,15 @@ var slHeight = window.innerHeight * 0.2;
 slotSvg.attr("width", slWidth)
     .attr("height", slHeight);
 
+//String variables for axis labels
 var fgText = "Appearances per Season Active";
 var fcText = "Appearances per Season";
 var wlText = "Win %";
 
+//Reference to video element
 var vidplayer = d3.select("#vid");
-// var vidWidth = window.innerWidth * 0.25;
-// var vidHeight = window.innerHeight * 0.25;
-// vidplayer.attr('width', vidWidth)
-//         .attr('height', vidHeight);
 
+//References to images on title to make sure they're the same size.
 var barker = d3.select("#barker");
 var carey = d3.select("#carey");
 carey.attr("height", barker.attr("height"));
@@ -227,17 +255,24 @@ carey.attr("width", barker.attr("width"));
 
 
 </script>
+<!--Include the other various scripts/functions necessary so this file isn't a kajillion lines long-->
 <script type="text/javascript" src="gradients.js"></script>
 <script type="text/javascript" src="fills.js"></script>
 <script type="text/javascript" src="createPlot.js"></script>
 <script type="text/javascript" src="remakePlot.js"></script>
 <script src="slotBar.js"></script>
 <script>
+
+//Maps for data - game-specific info goes in gameData, category-specific in category
 var gameData = d3.map();
 var categoryData = d3.map();
+
+//list of games to access stuff in the map if I ever need to iterate over the map
+//Can you tell I don't work in javascript a lot?
 var games = [];
 var categories = ["CarGames", "CashGames", "GroceryProductGames", "SmallPrizeGames", "OnePrizeGames", "TwoPrizeGames", "ThreePrizeGames", "FourFivePrizeGames"];
 
+//State variables, essentially. Keeps track of current options so we don't reload viz unnecessarily
 var currCat = "all";
 var currView = "all";
 var currPlot = "fwl";
@@ -245,8 +280,11 @@ var currAct = "n";
 
 d3.select("#gameName").text("Game Metadata");
 
+//Bring in the data!
 d3.queue()
     .defer(d3.tsv, "frequency.tsv"+'?' + Math.floor(Math.random() * 1000), function(d) {
+
+        //This looks like a mess and it is.
         gameData.set(d.PricingGame, {f1:d.f1, f2:d.f2, f3:d.f3, f4:d.f4, f5:d.f5, f6:d.f6,
             f7:d.f7, f8:d.f8, f9:d.f9, f10:d.f10, f11:d.f11, f12:d.f12,
             f13:d.f13, f14:d.f14, f15:d.f15, f16:d.f16, f17:d.f17, f18:d.f18,
@@ -258,6 +296,9 @@ d3.queue()
         games.push(d.PricingGame);
     })
     .defer(d3.tsv, "winLoss.tsv"+'?' + Math.floor(Math.random() * 1000), function (d) {
+
+        //Every game has an entry in frequency.tsv ^ but not all of them are present in winLoss
+        //Win-loss data was from season 29 on... can't control what they provided. Concept works regardless.
         let gd = gameData.get(d.PricingGame);
         let newobj = {...gd, w29:d.w29, w30:d.w30,
             w31:d.w31, w32:d.w32, w33:d.w33, w34:d.w34, w35:d.w35, w36:d.w36,
@@ -267,11 +308,15 @@ d3.queue()
         gameData.set(d.PricingGame, newobj);
     })
     .defer(d3.tsv, "gameSlots.tsv"+'?' + Math.floor(Math.random() * 1000), function(d) {
+        //Same deal as with win-loss. Doesn't go back to season 1, so we do what we can
         let gd = gameData.get(d.PricingGame);
         let newobj = {...gd, s1:d.s1, s2:d.s2, s3:d.s3, s4:d.s4, s5:d.s5, s6:d.s6, sNA:d.sNA};
         gameData.set(d.PricingGame, newobj);
     })
     .defer(d3.tsv, "category.tsv"+'?' + Math.floor(Math.random() * 1000), function(d) {
+
+        //Information specific to categories. Is it jank as hell? Yeah. 
+        //It works though and I was too far in to think of a better solution.
         categoryData.set("CarGames", {wl:d.CarGames, niceText:"Car Games", color:"#e3655b", abbr:"car"});
         categoryData.set("CashGames", {wl:d.CashGames, niceText:"Cash Games", color:cashColor, abbr:"cash"});
         categoryData.set("GroceryProductGames", {wl:d.GroceryProductGames, niceText:"Grocery Product Games", color:groceryColor, abbr:"gr"});
@@ -283,23 +328,31 @@ d3.queue()
     })
     .await(ready);
 
-// Add X axis
+//Placements of the x and y axes
 var heightShift = height * 0.85 - 50;
 var widthShift = width * 0.06 + 30;
 
-
-
+//These will eventually be linear/ordinal scales. Change based on type of graph needed.
 var x;
 var y;
+
+//These ones are for the game slot bar graph at the bottom
+var sx;
 var sy;
+
+//current shape ~ current type of chart. Circles for scatter, rect for bars
 var currentShape = 'circle';
-var tdone = false;
+
+//Whether or not an element in the plot has been clicked.
 var clicked = false;
 
 function ready(error, data) {
+
+    //This is... some trash to place the axis labels.
     let xr = (width * .96 - widthShift) / 2 + widthShift;
     let yr = (heightShift - (height * 0.02)) / 2 + (height * 0.02);
 
+    //See I told you these would be scales eventually!
     x = d3.scaleLinear()
     .domain([0, 40])
     .range([ widthShift, width * 0.96]);
@@ -308,6 +361,7 @@ function ready(error, data) {
     .domain([0,100])
     .range([ heightShift, height * 0.02]);
 
+    //Appending axes and labels.
     ctrSvg.append("g")
         .attr("id", "xax")
         .attr("transform", "translate(0," + heightShift + ")")
@@ -326,6 +380,8 @@ function ready(error, data) {
         .attr("transform", "translate(" + (widthShift - 50) + " ," + yr + "), rotate(-90)")
         .style("text-anchor", "middle")
         .text(wlText);
+
+    //Append a circle for each game that has both a frequency and a win-loss record
     for (var i = 0; i < games.length; i++) {
         let game = games[i];
         if(gameData.get(game).wPct) {
@@ -333,10 +389,10 @@ function ready(error, data) {
                 .attr("cx", function() { return x(parseFloat(gameData.get(game).fTotal) / parseFloat(gameData.get(game).fActive)); })
                 .attr("cy", function() { return y(parseFloat(gameData.get(game).wPct) * 100); })
                 .attr("id", game)
-                .attr("r", height * width / 75000)
+                .attr("r", height * width / 75000) //How did I come to dividing by 75000? Who knows.
                 .style("fill", getFill(gameData.get(game).Category))
                 .on("mouseenter", function() { if(!clicked) editMeta(game) })
-                .on("click", function() {
+                .on("click", function() { //This really should have gotten moved out to its own function... but it didn't.
                     if (clicked != game) {
                         d3.selectAll("circle")
                             .transition()
@@ -356,6 +412,10 @@ function ready(error, data) {
         }
     }
 
+
+    //All that ^ was to get the initial center visualization set up.
+    //This is for the bar graph down at the bottom
+    //And see? I told you these ones would be scales eventually too
     sx = d3.scaleBand()
             .range([slWidth * 0.02, slWidth * 0.98])
             .domain(['1', '2', '3', '4', '5', '6', '?'])
@@ -366,7 +426,7 @@ function ready(error, data) {
     
     sxr = ((slWidth * .98) - (slWidth * 0.02)) / 2 + slHeight * 0.9;
 
-
+    //Axis label tomfoolery
     slotSvg.append("g")
         .attr("id", "xax")
         .attr("transform", "translate(0," + (slHeight * 0.9 - 25) + ")")
@@ -377,6 +437,7 @@ function ready(error, data) {
         .style("text-anchor", "middle")
         .text("Appearances per Game Slot in Show");
 
+    //Append 7 bars that have no height
     for (var i = 1; i < 8; i++) {
         slotSvg.append('g')
             .attr('id', "gslot" + i)
@@ -398,10 +459,10 @@ function ready(error, data) {
     }
 }
 
-function editMeta(game) {
+function editMeta(game) { //edit metadata
     d3.select("#gameName").text(game);
     populateSlotBar(gameData.get(game));
-    vidplayer.attr('src', "https://www.youtube.com/embed/" + gameData.get(game).YTID)
+    vidplayer.attr('src', "https://www.youtube.com/embed/" + gameData.get(game).YTID) //youtube video for that game.
 }
 
 document.getElementById("Categories").onchange = updateViz;

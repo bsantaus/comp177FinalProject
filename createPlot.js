@@ -1,4 +1,21 @@
+/* The Price is Right Visualization
+ * Comp177 Final Project
+ * Completed May 1 2020
+ * Created by Ben Santaus
+ * 
+ * createPlot.js
+ * Contains four functions that create different kinds of plots 
+ * for the central SVG of the page.
+*/
+
+
+//Sadly all these functions are essentially the same but I didn't have 
+//time to figure out how to effectively modularize them
+
+//Anyway here's some functional garbage.
 function createBar(bars, map) {
+
+    //Reset the x and y axes to fit the kind of chart we have and the data in it
     y.domain([0, d3.max(bars, function(g) { return g.val })])
     x = d3.scaleBand()
           .range([widthShift, width*0.96])
@@ -13,6 +30,8 @@ function createBar(bars, map) {
                 return "rotate(-65)" 
                 });;
     d3.select("#yax").call(d3.axisLeft(y));
+
+    //no need for axis label, there are already labels ^ for each bar
     d3.select("#xLabel").text("");
 
     for (var i = 0; i < bars.length; i++) {
@@ -24,6 +43,10 @@ function createBar(bars, map) {
             .attr('y', heightShift)
             .attr('width', x.bandwidth())
             .style("opacity", function() {
+
+                //So I actually like this feature quite a lot and it made the viz a whole lot more usable
+                //This is how the plot is able to the clicked one bar/circle highlighted if the plot changes
+                //Although if the clicked bar/circle is no longer in the viz as a result it resets.
                 if (!clicked || (bars.map(b => b.name).includes(clicked) && game == clicked)) {
                     return 1;
                 } else {
@@ -34,7 +57,7 @@ function createBar(bars, map) {
                 if (!clicked) editMeta(game);
             })
             .on("click", function() {
-                if (clicked != game) {
+                if (clicked != game) { //Again this should have been made its own function but I didn't have time/motivation
                     d3.selectAll("rect")
                         .transition()
                         .style("opacity", function() { return (d3.select(this).attr("id") == game ? 1 : .5)})
@@ -51,6 +74,8 @@ function createBar(bars, map) {
                 }
             });
     }
+
+    //pretty transitions.
     ctrSvg.selectAll('rect')
       .transition()
       .attr('y', function() {
@@ -67,7 +92,11 @@ function createBar(bars, map) {
 
 }
 
+
+//Lots of the same in this one. Just with circles instead of rectangles.
 function createScatter(pts, map) {
+
+    //reset axes
     x = d3.scaleLinear()
     .domain([0, d3.max(pts, function(p) { return parseFloat(map.get(p.name).fTotal) / parseFloat(map.get(p.name).fActive) })])
     .range([ widthShift, width * 0.96]);
@@ -78,7 +107,7 @@ function createScatter(pts, map) {
 
     d3.select("#xax").call(d3.axisBottom(x));
     d3.select("#yax").call(d3.axisLeft(y));
-    d3.select("#xLabel").text(fgText);
+    d3.select("#xLabel").text(fgText); //we need an x axis label this time.
     d3.select("#yLabel").text(wlText);
 
 
@@ -100,7 +129,7 @@ function createScatter(pts, map) {
             .on("mouseenter", function() {
                 if (!clicked) editMeta(game);
             })
-            .on("click", function() {
+            .on("click", function() { //see I told you this was all the same just with circles.
                 if (clicked != game) {
                     d3.selectAll("circle")
                         .transition()
@@ -118,6 +147,8 @@ function createScatter(pts, map) {
                 }
             });
     }
+
+    //different pretty transition
     d3.selectAll('circle')
       .transition()
       .attr('cy', function() {
@@ -127,6 +158,10 @@ function createScatter(pts, map) {
       .duration(1000);
 }
 
+
+//Ok so this one is for bars again but it's when the grouped by category option is selected
+//And that's a great feature that I liked and it was totally a pain in the /sldvkbnsd
+//to get it working so instead I just repeated code.
 function createBarCat(bars, map) {
     y.domain([0, d3.max(bars, function(g) { return g.val })])
     x = d3.scaleBand()
@@ -148,12 +183,12 @@ function createBarCat(bars, map) {
         let cat = bars[i].name;
         ctrSvg.append('rect')
             .attr("id", cat)
-            .style('fill', categoryData.get(cat).color)
-            .attr('x', x(cat))
-            .attr('y', heightShift)
+            .style('fill', categoryData.get(cat).color) //you'll notice this one is a lot shorter
+            .attr('x', x(cat))                          //That's because there's no metadata I can display for these things
+            .attr('y', heightShift)                     //So it's insightful and kinda less interesting at the same time which is annoying.
             .attr('width', x.bandwidth());
     }
-    ctrSvg.selectAll('rect')
+    ctrSvg.selectAll('rect') //still got pretty transitions though.
       .transition()
       .attr('y', function() {
             var cat = d3.select(this).attr("id");
@@ -169,6 +204,7 @@ function createBarCat(bars, map) {
 
 }
 
+//Same deal as above except with circles.
 function createScatterCat(pts, map) {
     x = d3.scaleLinear()
     .domain([0, d3.max(pts, function(p) { return p.freq })])
